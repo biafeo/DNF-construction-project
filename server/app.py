@@ -1,10 +1,11 @@
-from config import *
+from config import db
 import os
 from flask_restful import Resource, Api
 from flask import Flask, make_response, jsonify, request
-from models import Employee, WorkLog, Expense, Project, db
+from models import Employee, WorkLog, Expense, Project
 from flask_cors import CORS
 from flask_migrate import Migrate
+from datetime import datetime
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 DATABASE = os.environ.get("DB_URI", f"sqlite:///{os.path.join(BASE_DIR, 'app.db')}")
@@ -56,8 +57,9 @@ class EmployeesById(Resource):
         employee = Employee.query.get(id)
         if employee is None:
             return make_response(jsonify(error='Employee not found'), 404)
-        for attr in request.get_json():
-            setattr(employee, attr, request.get_json()[attr])
+        data = request.get_json()
+        for attr in data:
+            setattr(employee, attr, data[attr])
         db.session.commit()
         return make_response(jsonify(employee.to_dict()), 200)
     
@@ -71,8 +73,142 @@ class EmployeesById(Resource):
     
 api.add_resource(EmployeesById, '/employees/<int:id>')
 
+class WorkLogs(Resource):
+    def get(self):
+        worklogs = [worklog.to_dict() for worklog in WorkLog.query.all()]
+        return make_response(jsonify(worklogs), 200)
+    
+    def post(self):
+        data = request.get_json()
+        date_obj = datetime.strptime(data['date'], '%Y-%m-%d').date()
+        new_worklog = WorkLog(
+            employee_id=data['employee_id'],
+            project_id=data['project_id'],
+            hours_worked=data['hours_worked'],
+            date=date_obj
+        )
+        db.session.add(new_worklog)
+        db.session.commit()
+        return make_response(jsonify(new_worklog.to_dict()), 201)
 
+api.add_resource(WorkLogs, '/worklogs')
 
+class WorkLogByID(Resource):
+    def get(self, id):
+        worklog = WorkLog.query.get(id)
+        if worklog is None:
+            return make_response(jsonify(error='Worklog not found'), 404)
+        return make_response(jsonify(worklog.to_dict()), 200)
+    
+    def patch(self, id):
+        worklog = WorkLog.query.get(id)
+        if worklog is None:
+            return make_response(jsonify(error='Worklog not found'), 404)
+        data = request.get_json()
+        for attr in data:
+            setattr(worklog, attr, data[attr])
+        db.session.commit()
+        return make_response(jsonify(worklog.to_dict()), 200)
+    
+    def delete(self, id):
+        worklog = WorkLog.query.get(id)
+        if worklog is None:
+            return make_response(jsonify(error='Worklog not found'), 404)
+        db.session.delete(worklog)
+        db.session.commit()
+        return make_response('', 204)
+
+api.add_resource(WorkLogByID, '/worklogs/<int:id>')
+
+class Projects(Resource):
+    def get(self):
+        projects = [project.to_dict() for project in Project.query.all()]
+        return make_response(jsonify(projects), 200)
+    
+    def post(self):
+        data = request.get_json()
+        new_project = Project(
+            name=data['name'],
+            location=data['location'],
+            description=data['description']
+        )
+        db.session.add(new_project)
+        db.session.commit()
+        return make_response(jsonify(new_project.to_dict()), 201)
+
+api.add_resource(Projects, '/projects')
+
+class ProjectsById(Resource):
+    def get(self, id):
+        project = Project.query.get(id)
+        if project is None:
+            return make_response(jsonify(error='Project not found'), 404)
+        return make_response(jsonify(project.to_dict()), 200)
+    
+    def patch(self, id):
+        project = Project.query.get(id)
+        if project is None:
+            return make_response(jsonify(error='Project not found'), 404)
+        data = request.get_json()
+        for attr in data:
+            setattr(project, attr, data[attr])
+        db.session.commit()
+        return make_response(jsonify(project.to_dict()), 200)
+    
+    def delete(self, id):
+        project = Project.query.get(id)
+        if project is None:
+            return make_response(jsonify(error='Project not found'), 404)
+        db.session.delete(project)
+        db.session.commit()
+        return make_response('', 204)
+
+api.add_resource(ProjectsById, '/projects/<int:id>')
+
+class Expenses(Resource):
+    def get(self):
+        expenses = [expense.to_dict() for expense in Expense.query.all()]
+        return make_response(jsonify(expenses), 200)
+    
+    def post(self):
+        data = request.get_json()
+        new_expense = Expense(
+            description=data['description'],
+            amount=data['amount'],
+            project_id=data['project_id']
+        )
+        db.session.add(new_expense)
+        db.session.commit()
+        return make_response(jsonify(new_expense.to_dict()), 201)
+
+api.add_resource(Expenses, '/expenses')
+
+class ExpensesById(Resource):
+    def get(self, id):
+        expense = Expense.query.get(id)
+        if expense is None:
+            return make_response(jsonify(error='Expense not found'), 404)
+        return make_response(jsonify(expense.to_dict()), 200)
+    
+    def patch(self, id):
+        expense = Expense.query.get(id)
+        if expense is None:
+            return make_response(jsonify(error='Expense not found'), 404)
+        data = request.get_json()
+        for attr in data:
+            setattr(expense, attr, data[attr])
+        db.session.commit()
+        return make_response(jsonify(expense.to_dict()), 200)
+    
+    def delete(self, id):
+        expense = Expense.query.get(id)
+        if expense is None:
+            return make_response(jsonify(error='Expense not found'), 404)
+        db.session.delete(expense)
+        db.session.commit()
+        return make_response('', 204)
+
+api.add_resource(ExpensesById, '/expenses/<int:id>')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)

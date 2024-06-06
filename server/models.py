@@ -35,7 +35,6 @@ class WorkLog(db.Model, SerializerMixin):
     
     employee = relationship('Employee', back_populates='work_logs')
     project = relationship('Project', back_populates='work_logs')
-    
     serialize_rules = ('-employee.work_logs', '-project.work_logs')
 
 class Project(db.Model, SerializerMixin):
@@ -71,4 +70,4 @@ class Expense(db.Model, SerializerMixin):
     
     project = relationship('Project', back_populates='expenses')
     
-    serialize_rules = ('-project.expenses')
+    serialize_rules = ('-project.expenses',)
