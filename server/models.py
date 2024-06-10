@@ -4,6 +4,7 @@ from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.ext.hybrid import hybrid_property
 from config import db
 
+
 class Employee(db.Model, SerializerMixin):
     __tablename__ = "employees"
     
@@ -22,7 +23,23 @@ class Employee(db.Model, SerializerMixin):
         assert '@' in email
         return email
     
-    serialize_rules = ('-password', '-work_logs.employee', 'work_logs')
+    @property
+    def hours_worked(self):
+        return sum(work_log.hours_worked for work_log in self.work_logs)
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'email': self.email,
+            'address': self.address,
+            'hourly_rate': self.hourly_rate,
+            'phone_number': self.phone_number,
+            'hours_worked': self.hours_worked,
+            'work_logs': [work_log.to_dict() for work_log in self.work_logs]
+        }
+    
+    serialize_rules = ('-password', '-work_logs.employee', 'work_logs', 'hours_worked')
 
 class WorkLog(db.Model, SerializerMixin):
     __tablename__ = "work_logs"
@@ -32,10 +49,22 @@ class WorkLog(db.Model, SerializerMixin):
     project_id = db.Column(db.Integer, db.ForeignKey('projects.id'), nullable=False)
     hours_worked = db.Column(db.Integer)
     date = db.Column(db.Date)
+    paid = db.Column(db.Boolean, default=False) 
     
     employee = relationship('Employee', back_populates='work_logs')
     project = relationship('Project', back_populates='work_logs')
     serialize_rules = ('-employee.work_logs', '-project.work_logs')
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'employee_id': self.employee_id,
+            'project_id': self.project_id,
+            'hours_worked': self.hours_worked,
+            'date': self.date.isoformat(),
+            'paid': self.paid
+        }
+
 
 class Project(db.Model, SerializerMixin):
     __tablename__ = "projects"
@@ -56,6 +85,15 @@ class Project(db.Model, SerializerMixin):
     @hybrid_property
     def total_expenses(self):
         return sum(expense.amount for expense in self.expenses)
+    
+    @hybrid_property
+    def material_expenses(self):
+        return sum(expense.amount for expense in self.expenses if "material" in expense.description.lower())
+    
+    @hybrid_property
+    def employee_expenses(self):
+        return sum(work_log.hours_worked * work_log.employee.hourly_rate for work_log in self.work_logs)
+    
     
     serialize_rules = ('-work_logs.project', 'work_logs', 'expenses')
 

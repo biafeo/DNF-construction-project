@@ -1,22 +1,24 @@
 from app import app
 from config import db
-from random import randint, choice as rc
-from datetime import date, time, datetime
-from faker import Faker
+from datetime import date
 from models import Employee, WorkLog, Expense, Project
-
-fake = Faker()
 
 if __name__ == '__main__':
     with app.app_context():
         print("Starting seed...")
-    
-        
-                
-        print("Deleting ...")
+
+        # Create all tables
+        db.create_all()
+
+        # Deleting existing data
+        print("Deleting existing data...")
         Project.query.delete()
+        Employee.query.delete()
+        WorkLog.query.delete()
+        Expense.query.delete()
         db.session.commit()
-        
+
+        # Creating projects
         print("Creating projects...")
         project1 = Project(
             name="Project 1",
@@ -32,13 +34,8 @@ if __name__ == '__main__':
         db.session.commit()
         print("Projects created successfully!")
 
-        db.create_all()
-
-        print("Deleting employees...")
-        Employee.query.delete()
-        db.session.commit()
+        # Creating employees
         print("Creating employees...")
-        
         christopher = Employee(
             name="Christopher",
             address='chrisaddress',
@@ -68,12 +65,9 @@ if __name__ == '__main__':
         db.session.add_all(employees)
         db.session.commit()
         print("Employees created successfully!")
-        
-        print("Deleting ...")
-        WorkLog.query.delete()
-        db.session.commit()
-        print("Creating worklog...")
-        
+
+        # Creating work logs
+        print("Creating work logs...")
         work_logs = [
             WorkLog(
                 employee_id=christopher.id,
@@ -106,18 +100,13 @@ if __name__ == '__main__':
                 date=date(2024, 6, 5)
             )
         ]
-        
+
         db.session.add_all(work_logs)
         db.session.commit()
         print("Work logs created successfully!")
-        
-        
-        
-        print("Deleting ...")
-        Expense.query.delete()
-        db.session.commit()
+
+        # Creating expenses
         print("Creating expenses...")
-        
         expenses = [
             Expense(
                 description="Materials for Project 1",
@@ -140,7 +129,7 @@ if __name__ == '__main__':
                 project_id=project2.id
             )
         ]
-        
+
         db.session.add_all(expenses)
         db.session.commit()
         print("Expenses created successfully!")

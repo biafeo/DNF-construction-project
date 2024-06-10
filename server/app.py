@@ -57,9 +57,24 @@ class EmployeesById(Resource):
         employee = Employee.query.get(id)
         if employee is None:
             return make_response(jsonify(error='Employee not found'), 404)
+        
         data = request.get_json()
-        for attr in data:
-            setattr(employee, attr, data[attr])
+        
+        if 'hours_worked' in data and 'project_id' in data:
+            hours_worked = data['hours_worked']
+            project_id = data['project_id']
+            work_log = WorkLog(
+                employee_id=id,
+                project_id=project_id,
+                hours_worked=hours_worked,
+                date=datetime.today().date()
+            )
+            db.session.add(work_log)
+        else:
+            for attr in data:
+                if hasattr(employee, attr):
+                    setattr(employee, attr, data[attr])
+        
         db.session.commit()
         return make_response(jsonify(employee.to_dict()), 200)
     
@@ -106,7 +121,8 @@ class WorkLogByID(Resource):
             return make_response(jsonify(error='Worklog not found'), 404)
         data = request.get_json()
         for attr in data:
-            setattr(worklog, attr, data[attr])
+            if hasattr(worklog, attr):
+                setattr(worklog, attr, data[attr])
         db.session.commit()
         return make_response(jsonify(worklog.to_dict()), 200)
     
@@ -119,6 +135,8 @@ class WorkLogByID(Resource):
         return make_response('', 204)
 
 api.add_resource(WorkLogByID, '/worklogs/<int:id>')
+
+
 
 class Projects(Resource):
     def get(self):
@@ -209,6 +227,10 @@ class ExpensesById(Resource):
         return make_response('', 204)
 
 api.add_resource(ExpensesById, '/expenses/<int:id>')
+
+
+
+
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
