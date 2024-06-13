@@ -45,7 +45,7 @@ function ExpensesList() {
             <h3>{expense.description}</h3>
             <div className="button-container">
               <Link to={`/expenses/${expense.id}`} className="button-link">
-                View Expense Details
+                <button>View Expense Details</button>
               </Link>
               <button onClick={() => setEditExpense(expense)}>Edit</button>
               <button onClick={() => handleDeleteExpense(expense.id)}>

@@ -1,16 +1,33 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function ExpenseForm({ onAddExpense }) {
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
-  const [projectId, setProjectId] = useState("");
+  const [projects, setProjects] = useState([]);
+  const [selectedProjectName, setSelectedProjectName] = useState("");
+
+  useEffect(() => {
+    fetch("/projects")
+      .then((r) => r.json())
+      .then((data) => {
+        setProjects(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching projects:", error);
+      });
+  }, []);
 
   function handleSubmit(e) {
     e.preventDefault();
+
+    const selectedProject = projects.find(
+      (project) => project.name === selectedProjectName
+    );
+
     const newExpense = {
       description,
       amount,
-      project_id: projectId,
+      project_id: selectedProject ? selectedProject.id : null,
     };
 
     fetch("/expenses", {
@@ -29,7 +46,7 @@ function ExpenseForm({ onAddExpense }) {
       .then((newExpense) => {
         onAddExpense(newExpense);
         setAmount("");
-        setProjectId("");
+        setSelectedProjectName("");
         setDescription("");
       })
       .catch((error) => {
@@ -40,18 +57,23 @@ function ExpenseForm({ onAddExpense }) {
   return (
     <form onSubmit={handleSubmit}>
       <input
-        type="text"
+        type="number"
         value={amount}
         onChange={(e) => setAmount(e.target.value)}
         placeholder="Amount"
       />
       <br />
-      <input
-        type="text"
-        value={projectId}
-        onChange={(e) => setProjectId(e.target.value)}
-        placeholder="Project ID"
-      />
+      <select
+        value={selectedProjectName}
+        onChange={(e) => setSelectedProjectName(e.target.value)}
+      >
+        <option value="">Select a project (optional)</option>
+        {projects.map((project) => (
+          <option key={project.id} value={project.name}>
+            {project.name}
+          </option>
+        ))}
+      </select>
       <br />
       <input
         type="text"

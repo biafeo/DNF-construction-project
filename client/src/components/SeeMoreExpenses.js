@@ -33,7 +33,7 @@ function SeeMoreExpenses() {
       </div>
       <div>
         <h3>Amount: {amount}</h3>
-        <h3>Project: {project.name}</h3>
+        <h3>Project: {project ? project.name : "No project assigned"}</h3>
         <button onClick={() => setEditExpense(expense)}>Edit</button>
         {editExpense && (
           <ExpenseFormEdit

@@ -43,7 +43,7 @@ function EmployeesList() {
             <h3>{employee.name}</h3>
             <div className="button-container">
               <Link to={`/employees/${employee.id}`} className="button-link">
-                View Employee Details
+                <button>View Employee Details</button>
               </Link>
               <button onClick={() => setEditEmployee(employee)}>Edit</button>
               <button onClick={() => handleDeleteEmployee(employee.id)}>

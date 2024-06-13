@@ -4,18 +4,29 @@ import { useParams } from "react-router-dom";
 function SeeMoreEmployee() {
   const { id } = useParams();
   const [employee, setEmployee] = useState(null);
+  const [projects, setProjects] = useState([]);
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
-  const [projectId, setProjectId] = useState("");
+  const [selectedProjectName, setSelectedProjectName] = useState("");
 
   useEffect(() => {
     fetch(`/employees/${id}`)
       .then((r) => r.json())
       .then((data) => {
+        data.work_logs = data.work_logs.filter((log) => !log.paid);
         setEmployee(data);
       })
       .catch((error) => {
         console.error("Error fetching employee:", error);
+      });
+
+    fetch("/projects")
+      .then((r) => r.json())
+      .then((data) => {
+        setProjects(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching projects:", error);
       });
   }, [id]);
 
@@ -44,12 +55,24 @@ function SeeMoreEmployee() {
       return;
     }
 
+    const selectedProject = projects.find(
+      (project) => project.name === selectedProjectName
+    );
+
+    if (!selectedProject) {
+      alert("Please select a valid project.");
+      return;
+    }
+
     fetch(`/employees/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ hours_worked: hoursToAdd, project_id: projectId }),
+      body: JSON.stringify({
+        hours_worked: hoursToAdd,
+        project_id: selectedProject.id,
+      }),
     })
       .then((r) => {
         if (r.ok) {
@@ -58,10 +81,13 @@ function SeeMoreEmployee() {
         throw new Error("Failed to update hours worked");
       })
       .then((updatedEmployee) => {
+        updatedEmployee.work_logs = updatedEmployee.work_logs.filter(
+          (log) => !log.paid
+        );
         setEmployee(updatedEmployee);
         setStartTime("");
         setEndTime("");
-        setProjectId("");
+        setSelectedProjectName("");
       })
       .catch((error) => {
         console.error("Error updating hours worked:", error);
@@ -84,9 +110,9 @@ function SeeMoreEmployee() {
       })
       .then((updatedLog) => {
         setEmployee((prev) => {
-          const updatedLogs = prev.work_logs.map((log) =>
-            log.id === workLogId ? updatedLog : log
-          );
+          const updatedLogs = prev.work_logs
+            .map((log) => (log.id === workLogId ? updatedLog : log))
+            .filter((log) => !log.paid);
           return { ...prev, work_logs: updatedLogs };
         });
       })
@@ -129,9 +155,13 @@ function SeeMoreEmployee() {
               <p>Project ID: {log.project_id}</p>
               <p>Hours Worked: {log.hours_worked}</p>
               <p>Paid: {log.paid ? "Yes" : "No"}</p>
-              <button onClick={() => handleTogglePaidStatus(log.id, log.paid)}>
-                {log.paid ? "Unmark as Paid" : "Mark as Paid"}
-              </button>
+              {!log.paid && (
+                <button
+                  onClick={() => handleTogglePaidStatus(log.id, log.paid)}
+                >
+                  Mark as Paid
+                </button>
+              )}
             </li>
           ))}
         </ul>
@@ -159,13 +189,19 @@ function SeeMoreEmployee() {
         </label>
         <br />
         <label>
-          Project ID:
-          <input
-            type="text"
-            value={projectId}
-            onChange={(e) => setProjectId(e.target.value)}
+          Project:
+          <select
+            value={selectedProjectName}
+            onChange={(e) => setSelectedProjectName(e.target.value)}
             required
-          />
+          >
+            <option value="">Select a project</option>
+            {projects.map((project) => (
+              <option key={project.id} value={project.name}>
+                {project.name}
+              </option>
+            ))}
+          </select>
         </label>
         <br />
         <button type="submit">Add Hours</button>

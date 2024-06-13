@@ -4,6 +4,7 @@ function ProjectForm({ onAddProject }) {
   const [name, setName] = useState("");
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
+  const [contract_payment, setContract_payment] = useState("");
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -11,6 +12,7 @@ function ProjectForm({ onAddProject }) {
       name,
       location,
       description,
+      contract_payment,
     };
 
     fetch("/projects", {
@@ -31,6 +33,7 @@ function ProjectForm({ onAddProject }) {
         setName("");
         setLocation("");
         setDescription("");
+        setContract_payment("");
       });
   }
 
@@ -55,6 +58,12 @@ function ProjectForm({ onAddProject }) {
         value={description}
         onChange={(e) => setDescription(e.target.value)}
         placeholder="Description"
+      />
+      <input
+        type="text"
+        value={contract_payment}
+        onChange={(e) => setContract_payment(e.target.value)}
+        placeholder="Contract Payment"
       />
       <br />
       <button type="submit">Add Project</button>

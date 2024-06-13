@@ -59,7 +59,9 @@ class WorkLog(db.Model, SerializerMixin):
         return {
             'id': self.id,
             'employee_id': self.employee_id,
+            'employee_name': self.employee.name,  
             'project_id': self.project_id,
+            'project_name': self.project.name,  
             'hours_worked': self.hours_worked,
             'date': self.date.isoformat(),
             'paid': self.paid
@@ -73,6 +75,7 @@ class Project(db.Model, SerializerMixin):
     name = db.Column(db.String)
     location = db.Column(db.String)
     description = db.Column(db.String)
+    contract_payment=db.Column(db.Integer)
     
     work_logs = relationship('WorkLog', back_populates='project')
     expenses = relationship('Expense', back_populates='project')
@@ -93,7 +96,8 @@ class Project(db.Model, SerializerMixin):
             'location': self.location,
             'description': self.description,
             'material_expenses': self.material_expenses,
-            'employee_expenses': self.employee_expenses
+            'employee_expenses': self.employee_expenses,
+            'contract_payment' :self.contract_payment
         }
 
     
@@ -107,7 +111,7 @@ class Expense(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     description = db.Column(db.String)
     amount = db.Column(db.Integer)
-    project_id = db.Column(db.Integer, db.ForeignKey('projects.id'), nullable=False)
+    project_id = db.Column(db.Integer, db.ForeignKey('projects.id'), nullable=True)
     
     project = relationship('Project', back_populates='expenses')
     

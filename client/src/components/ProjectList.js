@@ -46,7 +46,7 @@ function ProjectList() {
             <h3>{project.name}</h3>
             <div className="button-container">
               <Link to={`/projects/${project.id}`} className="button-link">
-                View Project Details
+                <button>View Project Details</button>
               </Link>
               <button onClick={() => setEditProject(project)}>Edit</button>
               <button onClick={() => handleDeleteProject(project.id)}>

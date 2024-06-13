@@ -1,15 +1,19 @@
 import { useState, useEffect } from "react";
 
 function ProjectFormEdit({ project, onEditProject }) {
-  const [name, setName] = useState(project.name);
-  const [location, setLocation] = useState(project.location);
-  const [description, setDescription] = useState(project.description);
+  const [name, setName] = useState(project?.name || "");
+  const [location, setLocation] = useState(project?.location || "");
+  const [description, setDescription] = useState(project?.description || "");
+  const [contract_payment, setContract_payment] = useState(
+    project?.contract_payment || ""
+  );
 
   useEffect(() => {
     if (project) {
-      setName(project.name);
-      setLocation(project.location);
-      setDescription(project.description);
+      setName(project.name || "");
+      setLocation(project.location || "");
+      setDescription(project.description || "");
+      setContract_payment(project.contract_payment || "");
     }
   }, [project]);
 
@@ -20,6 +24,7 @@ function ProjectFormEdit({ project, onEditProject }) {
       name,
       location,
       description,
+      contract_payment,
     };
 
     fetch(`/projects/${project.id}`, {
@@ -54,7 +59,7 @@ function ProjectFormEdit({ project, onEditProject }) {
           placeholder="Name"
         />
         <input
-          type="location"
+          type="text"
           value={location}
           onChange={(e) => setLocation(e.target.value)}
           placeholder="Location"
@@ -65,7 +70,12 @@ function ProjectFormEdit({ project, onEditProject }) {
           onChange={(e) => setDescription(e.target.value)}
           placeholder="Description"
         />
-
+        <input
+          type="text"
+          value={contract_payment}
+          onChange={(e) => setContract_payment(e.target.value)}
+          placeholder="Contract Payment"
+        />
         <button type="submit">Update Project</button>
       </form>
     </div>

@@ -56,8 +56,8 @@ function WorklogList() {
       <div className="worklogs-list">
         {worklogs.map((worklog) => (
           <div key={worklog.id} className="worklog-card">
-            <h3>Employee ID: {worklog.employee_id}</h3>
-            <h3>Project ID: {worklog.project_id}</h3>
+            <h3>Employee: {worklog.employee_name}</h3>
+            <h3>Project: {worklog.project_name}</h3>
             <h3>Hours Worked: {worklog.hours_worked}</h3>
             <h3>Date: {new Date(worklog.date).toLocaleDateString()}</h3>
             <h3>Paid: {worklog.paid ? "Yes" : "No"}</h3>

@@ -10,9 +10,6 @@ function SeeMoreProject() {
       .then((r) => r.json())
       .then((data) => {
         setProject(data);
-      })
-      .catch((error) => {
-        console.error("Error fetching projects:", error);
       });
   }, [id]);
 
@@ -20,8 +17,17 @@ function SeeMoreProject() {
     return <div>Loading...</div>;
   }
 
-  const { name, location, description, material_expenses, employee_expenses } =
-    project;
+  const {
+    name,
+    location,
+    description,
+    material_expenses,
+    employee_expenses,
+    contract_payment,
+  } = project;
+
+  const totalExpense = material_expenses + employee_expenses;
+  const profit = contract_payment - totalExpense;
 
   return (
     <div className="see-more-project-card-container">
@@ -33,6 +39,9 @@ function SeeMoreProject() {
         <h3>Description: {description}</h3>
         <h3>Material Expenses: {material_expenses}</h3>
         <h3>Employee Expenses: {employee_expenses}</h3>
+        <h3>Contract Payment: {contract_payment}</h3>
+        <h3>Total Expenses: {totalExpense}</h3>
+        <h3>Profit: {profit}</h3>
       </div>
     </div>
   );

@@ -153,7 +153,8 @@ class Projects(Resource):
         new_project = Project(
             name=data['name'],
             location=data['location'],
-            description=data['description']
+            description=data['description'],
+            contract_payment=data['contract_payment']
         )
         db.session.add(new_project)
         db.session.commit()
@@ -205,7 +206,6 @@ class Expenses(Resource):
         return make_response(jsonify(new_expense.to_dict()), 201)
 
 api.add_resource(Expenses, '/expenses')
-
 class ExpensesById(Resource):
     def get(self, id):
         expense = Expense.query.get(id)
@@ -214,16 +214,22 @@ class ExpensesById(Resource):
         return make_response(jsonify(expense.to_dict()), 200)
     
     def patch(self, id):
+        print(f"Received PATCH request for Expense with ID {id}")
         expense = Expense.query.get(id)
         if expense is None:
             return make_response(jsonify(error='Expense not found'), 404)
+
         data = request.get_json()
+       
 
         if 'project_id' in data:
-            project = Project.query.get(data['project_id'])
-            if project is None:
-                return make_response(jsonify(error='Project not found'), 404)
-            expense.project = project
+            if data['project_id'] is not None:
+                project = Project.query.get(data['project_id'])
+                if project is None:
+                    return make_response(jsonify(error='Project not found'), 404)
+                expense.project = project
+            else:
+                expense.project = None  
 
         for attr in data:
             if attr != 'project_id':
@@ -240,7 +246,6 @@ class ExpensesById(Resource):
         return make_response('', 204)
 
 api.add_resource(ExpensesById, '/expenses/<int:id>')
-
 
 
 
