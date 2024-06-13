@@ -17,6 +17,9 @@ function NavBar() {
         <NavLink to="/expenses" className="nav-link" activeClassName="active">
           Expenses
         </NavLink>
+        <NavLink to="/worklogs" className="nav-link" activeClassName="active">
+          Worklogs
+        </NavLink>
       </div>
     </nav>
   );

@@ -2,13 +2,13 @@ import { useState, useEffect } from "react";
 
 function ExpenseFormEdit({ expense, onEditExpense }) {
   const [amount, setAmount] = useState(expense.amount);
-  const [project, setProject] = useState(expense.project);
+  const [projectId, setProjectId] = useState(expense.project.id);
   const [description, setDescription] = useState(expense.description);
 
   useEffect(() => {
     if (expense) {
       setAmount(expense.amount);
-      setProject(expense.project);
+      setProjectId(expense.project.id);
       setDescription(expense.description);
     }
   }, [expense]);
@@ -18,7 +18,7 @@ function ExpenseFormEdit({ expense, onEditExpense }) {
     const updatedExpense = {
       id: expense.id,
       amount,
-      project,
+      project_id: projectId,
       description,
     };
 
@@ -45,19 +45,19 @@ function ExpenseFormEdit({ expense, onEditExpense }) {
 
   return (
     <div>
-      <h3>Update expense Information</h3>
+      <h3>Update Expense Information</h3>
       <form onSubmit={handleSubmit} className="form">
         <input
-          type="text"
+          type="number"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
           placeholder="Amount"
         />
         <input
-          type="project"
-          value={project}
-          onChange={(e) => setProject(e.target.value)}
-          placeholder="Project"
+          type="text"
+          value={projectId}
+          onChange={(e) => setProjectId(e.target.value)}
+          placeholder="Project ID"
         />
         <input
           type="text"
@@ -65,7 +65,6 @@ function ExpenseFormEdit({ expense, onEditExpense }) {
           onChange={(e) => setDescription(e.target.value)}
           placeholder="Description"
         />
-
         <button type="submit">Update Expense</button>
       </form>
     </div>

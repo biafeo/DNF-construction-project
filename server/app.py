@@ -120,9 +120,14 @@ class WorkLogByID(Resource):
         if worklog is None:
             return make_response(jsonify(error='Worklog not found'), 404)
         data = request.get_json()
-        for attr in data:
+        for attr, value in data.items():
+            if attr == 'date':
+                try:
+                    value = datetime.strptime(value, '%Y-%m-%d').date()
+                except ValueError:
+                    return make_response(jsonify({"error": "Invalid date format"}), 400)
             if hasattr(worklog, attr):
-                setattr(worklog, attr, data[attr])
+                setattr(worklog, attr, value)
         db.session.commit()
         return make_response(jsonify(worklog.to_dict()), 200)
     
@@ -213,8 +218,16 @@ class ExpensesById(Resource):
         if expense is None:
             return make_response(jsonify(error='Expense not found'), 404)
         data = request.get_json()
+
+        if 'project_id' in data:
+            project = Project.query.get(data['project_id'])
+            if project is None:
+                return make_response(jsonify(error='Project not found'), 404)
+            expense.project = project
+
         for attr in data:
-            setattr(expense, attr, data[attr])
+            if attr != 'project_id':
+                setattr(expense, attr, data[attr])
         db.session.commit()
         return make_response(jsonify(expense.to_dict()), 200)
     

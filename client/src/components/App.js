@@ -7,6 +7,8 @@ import SeeMoreEmployee from "./SeeMoreEmployee";
 import ProjectList from "./ProjectList";
 import SeeMoreProject from "./SeeMoreProject";
 import ExpensesList from "./ExpensesList";
+import WorklogList from "./WorklogList";
+import SeeMoreExpenses from "./SeeMoreExpenses";
 
 function App() {
   return (
@@ -30,6 +32,12 @@ function App() {
         </Route>
         <Route exact path="/expenses">
           <ExpensesList />
+        </Route>
+        <Route exact path="/expenses/:id">
+          <SeeMoreExpenses />
+        </Route>
+        <Route exact path="/worklogs">
+          <WorklogList />
         </Route>
       </Switch>
     </Router>

@@ -79,20 +79,23 @@ class Project(db.Model, SerializerMixin):
     employees = association_proxy('work_logs', 'employee')
     
     @hybrid_property
-    def total_hours(self):
-        return sum(work_log.hours_worked for work_log in self.work_logs)
-    
-    @hybrid_property
-    def total_expenses(self):
-        return sum(expense.amount for expense in self.expenses)
-    
-    @hybrid_property
     def material_expenses(self):
         return sum(expense.amount for expense in self.expenses if "material" in expense.description.lower())
     
     @hybrid_property
     def employee_expenses(self):
-        return sum(work_log.hours_worked * work_log.employee.hourly_rate for work_log in self.work_logs)
+        return sum(work_log.hours_worked * work_log.employee.hourly_rate for work_log in self.work_logs if work_log.paid)
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'location': self.location,
+            'description': self.description,
+            'material_expenses': self.material_expenses,
+            'employee_expenses': self.employee_expenses
+        }
+
     
     
     serialize_rules = ('-work_logs.project', 'work_logs', 'expenses')
