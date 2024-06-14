@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import BossNavBar from "./BossNavBar";
 
 function SeeMoreProject() {
   const { id } = useParams();
@@ -30,6 +31,7 @@ function SeeMoreProject() {
   const profit = contract_payment - totalExpense;
 
   return (
+    <><BossNavBar/>
     <div className="see-more-project-card-container">
       <div>
         <h1>{name}</h1>
@@ -43,7 +45,7 @@ function SeeMoreProject() {
         <h3>Total Expenses: {totalExpense}</h3>
         <h3>Profit: {profit}</h3>
       </div>
-    </div>
+    </div></>
   );
 }
 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import BossNavBar from "./BossNavBar";
 
 function SeeMoreEmployee() {
   const { id } = useParams();
@@ -59,11 +60,6 @@ function SeeMoreEmployee() {
       (project) => project.name === selectedProjectName
     );
 
-    if (!selectedProject) {
-      alert("Please select a valid project.");
-      return;
-    }
-
     fetch(`/employees/${id}`, {
       method: "PATCH",
       headers: {
@@ -71,7 +67,7 @@ function SeeMoreEmployee() {
       },
       body: JSON.stringify({
         hours_worked: hoursToAdd,
-        project_id: selectedProject.id,
+        project_id: selectedProject ? selectedProject.id : null,
       }),
     })
       .then((r) => {
@@ -134,79 +130,81 @@ function SeeMoreEmployee() {
   );
 
   return (
-    <div className="see-more-employee-card-container">
-      <div>
-        <h1>{name}</h1>
-      </div>
-      <div>
-        <h3>Email: {email}</h3>
-        <h3>Address: {address}</h3>
-        <h3>Hourly Rate: {hourly_rate}</h3>
-        <h3>Phone number: {phone_number}</h3>
-        <h3>Hours Worked: {totalHours}</h3>
-        <h3>Total Payment: {totalPayment}</h3>
-      </div>
-      <div>
-        <h3>Work Logs</h3>
-        <ul>
-          {work_logs.map((log) => (
-            <li key={log.id}>
-              <p>Date: {log.date}</p>
-              <p>Project ID: {log.project_id}</p>
-              <p>Hours Worked: {log.hours_worked}</p>
-              <p>Paid: {log.paid ? "Yes" : "No"}</p>
-              {!log.paid && (
-                <button
-                  onClick={() => handleTogglePaidStatus(log.id, log.paid)}
-                >
-                  Mark as Paid
-                </button>
-              )}
-            </li>
-          ))}
-        </ul>
-      </div>
-      <form onSubmit={handleAddHours}>
-        <h3>Add Hours Worked</h3>
-        <label>
-          Worked from:
-          <input
-            type="time"
-            value={startTime}
-            onChange={(e) => setStartTime(e.target.value)}
-            required
-          />
-        </label>
-        <br />
-        <label>
-          Until:
-          <input
-            type="time"
-            value={endTime}
-            onChange={(e) => setEndTime(e.target.value)}
-            required
-          />
-        </label>
-        <br />
-        <label>
-          Project:
-          <select
-            value={selectedProjectName}
-            onChange={(e) => setSelectedProjectName(e.target.value)}
-            required
-          >
-            <option value="">Select a project</option>
-            {projects.map((project) => (
-              <option key={project.id} value={project.name}>
-                {project.name}
-              </option>
+    <>
+      <BossNavBar />
+      <div className="see-more-employee-card-container">
+        <div>
+          <h1>{name}</h1>
+        </div>
+        <div>
+          <h3>Email: {email}</h3>
+          <h3>Address: {address}</h3>
+          <h3>Hourly Rate: {hourly_rate}</h3>
+          <h3>Phone number: {phone_number}</h3>
+          <h3>Hours Worked: {totalHours}</h3>
+          <h3>Total Payment: {totalPayment}</h3>
+        </div>
+        <div>
+          <h3>Work Logs</h3>
+          <ul>
+            {work_logs.map((log) => (
+              <li key={log.id}>
+                <p>Date: {log.date}</p>
+                <p>Project: {log.project_name}</p>
+                <p>Hours Worked: {log.hours_worked}</p>
+                <p>Paid: {log.paid ? "Yes" : "No"}</p>
+                {!log.paid && (
+                  <button
+                    onClick={() => handleTogglePaidStatus(log.id, log.paid)}
+                  >
+                    Mark as Paid
+                  </button>
+                )}
+              </li>
             ))}
-          </select>
-        </label>
-        <br />
-        <button type="submit">Add Hours</button>
-      </form>
-    </div>
+          </ul>
+        </div>
+        <form onSubmit={handleAddHours}>
+          <h3>Add Hours Worked</h3>
+          <label>
+            Worked from:
+            <input
+              type="time"
+              value={startTime}
+              onChange={(e) => setStartTime(e.target.value)}
+              required
+            />
+          </label>
+          <br />
+          <label>
+            Until:
+            <input
+              type="time"
+              value={endTime}
+              onChange={(e) => setEndTime(e.target.value)}
+              required
+            />
+          </label>
+          <br />
+          <label>
+            Project:
+            <select
+              value={selectedProjectName}
+              onChange={(e) => setSelectedProjectName(e.target.value)}
+            >
+              <option value="">Select a project</option>
+              {projects.map((project) => (
+                <option key={project.id} value={project.name}>
+                  {project.name}
+                </option>
+              ))}
+            </select>
+          </label>
+          <br />
+          <button type="submit">Add Hours</button>
+        </form>
+      </div>
+    </>
   );
 }
 

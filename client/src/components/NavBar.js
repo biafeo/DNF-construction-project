@@ -1,25 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 
+const handleLogout = (setEmployee) => {
+  fetch("/sign_out", {
+    method: "DELETE",
+  }).then((res) => {
+    if (res.ok) {
+      setEmployee(null);
+    }
+  });
+};
+
 function NavBar() {
+  const [employee, setEmployee] = useState(null);
+
   return (
     <nav className="navbar">
       <div className="nav-links-container">
         <NavLink to="/" exact className="nav-link" activeClassName="active">
-          Home
+          <button> Home</button>
         </NavLink>
-        <NavLink to="/employees" className="nav-link" activeClassName="active">
-          Employees
+        <NavLink to="/sign_in" className="nav-link" activeClassName="active">
+          <button> Login</button>
         </NavLink>
-        <NavLink to="/projects" className="nav-link" activeClassName="active">
-          Projects
-        </NavLink>
-        <NavLink to="/expenses" className="nav-link" activeClassName="active">
-          Expenses
-        </NavLink>
-        <NavLink to="/worklogs" className="nav-link" activeClassName="active">
-          Worklogs
-        </NavLink>
+        <button type="button" onClick={() => handleLogout(setEmployee)}>
+          Log Out
+        </button>
       </div>
     </nav>
   );

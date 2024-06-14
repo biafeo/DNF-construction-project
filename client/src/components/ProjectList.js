@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import ProjectForm from "./ProjectForm";
 import ProjectFormEdit from "./ProjectFormEdit";
 import SeeMoreProject from "./SeeMoreProject";
+import BossNavBar from "./BossNavBar";
 
 function ProjectList() {
   const [projects, setProjects] = useState([]);
@@ -38,33 +39,36 @@ function ProjectList() {
   };
 
   return (
-    <div className="project-container">
-      <h1>My Projects</h1>
-      <div className="projects-list">
-        {projects.map((project) => (
-          <div key={project.id} className="project-card">
-            <h3>{project.name}</h3>
-            <div className="button-container">
-              <Link to={`/projects/${project.id}`} className="button-link">
-                <button>View Project Details</button>
-              </Link>
-              <button onClick={() => setEditProject(project)}>Edit</button>
-              <button onClick={() => handleDeleteProject(project.id)}>
-                Delete
-              </button>
+    <>
+      <BossNavBar />
+      <div className="project-container">
+        <h1>My Projects</h1>
+        <div className="projects-list">
+          {projects.map((project) => (
+            <div key={project.id} className="project-card">
+              <h3>{project.name}</h3>
+              <div className="button-container">
+                <Link to={`/projects/${project.id}`} className="button-link">
+                  <button>View Project Details</button>
+                </Link>
+                <button onClick={() => setEditProject(project)}>Edit</button>
+                <button onClick={() => handleDeleteProject(project.id)}>
+                  Delete
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
+        {editProject && (
+          <ProjectFormEdit
+            onEditProject={handleEditProject}
+            project={editProject}
+          />
+        )}
+        <h3>Add Project:</h3>
+        <ProjectForm onAddProject={handleAddProject} />
       </div>
-      {editProject && (
-        <ProjectFormEdit
-          onEditProject={handleEditProject}
-          project={editProject}
-        />
-      )}
-      <h3>Add Project:</h3>
-      <ProjectForm onAddProject={handleAddProject} />
-    </div>
+    </>
   );
 }
 

@@ -3,24 +3,32 @@ import { useState, useEffect } from "react";
 function WorklogFormEdit({ worklog, onEditWorklog }) {
   const [employee, setEmployee] = useState(worklog.employee_id);
   const [project, setProject] = useState(worklog.project_id);
-  const [hours_worked, setHours_worked] = useState(worklog.hours_worked);
+  const [hours_worked, setHoursWorked] = useState(worklog.hours_worked);
   const [date, setDate] = useState(worklog.date);
+  const [projects, setProjects] = useState([]);
 
   useEffect(() => {
     if (worklog) {
       setEmployee(worklog.employee_id);
       setProject(worklog.project_id);
-      setHours_worked(worklog.hours_worked);
+      setHoursWorked(worklog.hours_worked);
       setDate(worklog.date);
     }
   }, [worklog]);
+
+  useEffect(() => {
+    fetch("/projects")
+      .then((response) => response.json())
+      .then((data) => setProjects(data))
+      .catch((error) => console.error("Error fetching projects:", error));
+  }, []);
 
   function handleSubmit(e) {
     e.preventDefault();
     const updatedWorklog = {
       id: worklog.id,
       employee_id: employee,
-      project_id: project,
+      project_id: project === "" ? null : project,
       hours_worked,
       date,
     };
@@ -56,16 +64,21 @@ function WorklogFormEdit({ worklog, onEditWorklog }) {
           onChange={(e) => setEmployee(e.target.value)}
           placeholder="Employee"
         />
-        <input
-          type="text"
-          value={project}
+        <select
+          value={project || ""}
           onChange={(e) => setProject(e.target.value)}
-          placeholder="Project"
-        />
+        >
+          <option value="">Select a project</option>
+          {projects.map((project) => (
+            <option key={project.id} value={project.id}>
+              {project.name}
+            </option>
+          ))}
+        </select>
         <input
-          type="text"
+          type="number"
           value={hours_worked}
-          onChange={(e) => setHours_worked(e.target.value)}
+          onChange={(e) => setHoursWorked(e.target.value)}
           placeholder="Hours Worked"
         />
         <input

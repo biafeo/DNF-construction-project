@@ -39,28 +39,28 @@ if __name__ == '__main__':
         christopher = Employee(
             name="Christopher",
             address='chrisaddress',
-            email="chrisemail@gmail.com",
+            email="chrise@mail.com",
             phone_number=1111111111,
             hourly_rate=50,
-            password="password1"
+            isBoss = True
         )
+        christopher.password_hash = "password1"
         bruno = Employee(
             name="Bruno",
             address="brunoaddress",
             email="bruno@email.com",
             phone_number=1111111112,
-            hourly_rate=60,
-            password="password2"
+            hourly_rate=60
         )
+        bruno.password_hash= "password2"
         bia = Employee(
             name="Bia",
             address="biaaddress2",
             email="bia@email.com",
             phone_number=1111111113,
-            hourly_rate=55,
-            password="password3"
+            hourly_rate=55
         )
-
+        bia.password_hash = "password3"
         employees = [bruno, christopher, bia]
         db.session.add_all(employees)
         db.session.commit()

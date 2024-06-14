@@ -1,10 +1,10 @@
 import React from "react";
-import NavBar from "./NavBar";
+import BossNavBar from "./BossNavBar";
 
-function Homepage() {
+function BossHomepage() {
   return (
     <>
-      <NavBar />
+      <BossNavBar />
       <div className="homepage">
         <div className="welcome">
           <div className="welcome-text">
@@ -52,4 +52,4 @@ function Homepage() {
   );
 }
 
-export default Homepage;
+export default BossHomepage;

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import ExpenseForm from "./ExpenseForm";
 import ExpenseFormEdit from "./ExpenseFormEdit";
+import BossNavBar from "./BossNavBar";
 
 function ExpensesList() {
   const [expenses, setExpenses] = useState([]);
@@ -37,33 +38,36 @@ function ExpensesList() {
   };
 
   return (
-    <div className="expense-container">
-      <h1>My Expenses</h1>
-      <div className="expenses-list">
-        {expenses.map((expense) => (
-          <div key={expense.id} className="expense-card">
-            <h3>{expense.description}</h3>
-            <div className="button-container">
-              <Link to={`/expenses/${expense.id}`} className="button-link">
-                <button>View Expense Details</button>
-              </Link>
-              <button onClick={() => setEditExpense(expense)}>Edit</button>
-              <button onClick={() => handleDeleteExpense(expense.id)}>
-                Delete
-              </button>
+    <>
+      <BossNavBar />
+      <div className="expense-container">
+        <h1>My Expenses</h1>
+        <div className="expenses-list">
+          {expenses.map((expense) => (
+            <div key={expense.id} className="expense-card">
+              <h3>{expense.description}</h3>
+              <div className="button-container">
+                <Link to={`/expenses/${expense.id}`} className="button-link">
+                  <button>View Expense Details</button>
+                </Link>
+                <button onClick={() => setEditExpense(expense)}>Edit</button>
+                <button onClick={() => handleDeleteExpense(expense.id)}>
+                  Delete
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
+        {editExpense && (
+          <ExpenseFormEdit
+            onEditExpense={handleEditExpense}
+            expense={editExpense}
+          />
+        )}
+        <h3>Add Expense:</h3>
+        <ExpenseForm onAddExpense={handleAddExpense} />
       </div>
-      {editExpense && (
-        <ExpenseFormEdit
-          onEditExpense={handleEditExpense}
-          expense={editExpense}
-        />
-      )}
-      <h3>Add Expense:</h3>
-      <ExpenseForm onAddExpense={handleAddExpense} />
-    </div>
+    </>
   );
 }
 

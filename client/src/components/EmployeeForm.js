@@ -4,7 +4,7 @@ function EmployeeForm({ onAddEmployee }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
-  const [password, setPassword] = useState("");
+  const [_password_hash, setPassword] = useState("");
   const [hourly_rate, setHourly_rate] = useState("");
   const [phone_number, setPhone_number] = useState("");
 
@@ -14,7 +14,7 @@ function EmployeeForm({ onAddEmployee }) {
       name,
       email,
       address,
-      password,
+      _password_hash,
       hourly_rate,
       phone_number,
     };
@@ -68,7 +68,7 @@ function EmployeeForm({ onAddEmployee }) {
       <br />
       <input
         type="text"
-        value={password}
+        value={_password_hash}
         onChange={(e) => setPassword(e.target.value)}
         placeholder="Password"
       />
