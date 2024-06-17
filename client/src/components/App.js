@@ -46,7 +46,7 @@ function App() {
         <Route exact path="/home">
           <BossHomePage />
         </Route>
-        <Route exact path="/employee">
+        <Route exact path="/employee/:id">
           <EmployeePage />
         </Route>
       </Switch>

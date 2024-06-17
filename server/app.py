@@ -148,13 +148,21 @@ class EmployeesById(Resource):
 api.add_resource(EmployeesById, '/employees/<int:id>')
 
 class WorkLogs(Resource):
+
     def get(self):
-        
-        # if boss
-        worklogs = [worklog.to_dict() for worklog in WorkLog.query.all()]
-        # if employee
-        # find employee and do
-        #worklogs =  [worklog.to_dict() for worklog in employee.worklogs]
+        user_id = session.get("employee_id")
+        if not user_id:
+            return make_response({"message": "Unauthorized"}, 401)
+
+        user = Employee.query.get(user_id)
+        if not user:
+            return make_response({"message": "Unauthorized"}, 401)
+
+        if user.isBoss:
+            worklogs = [worklog.to_dict() for worklog in WorkLog.query.all()]
+        else:
+            worklogs = [worklog.to_dict() for worklog in WorkLog.query.filter_by(employee_id=user_id).all()]
+
         return make_response(jsonify(worklogs), 200)
     
     def post(self):

@@ -27,7 +27,7 @@ function Login() {
         if (data.isBoss) {
           history.push("/home");
         } else {
-          history.push("/employee");
+          history.push(`/employee/${data.id}`);
         }
       })
       .catch((err) => {
