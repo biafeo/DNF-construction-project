@@ -1,18 +1,10 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
-
-const handleLogout = (setEmployee) => {
-  fetch("/sign_out", {
-    method: "DELETE",
-  }).then((res) => {
-    if (res.ok) {
-      setEmployee(null);
-    }
-  });
-};
+import Logout from "./Logout";
 
 function BossNavBar() {
   const [employee, setEmployee] = useState(null);
+
   return (
     <nav className="navbar">
       <div className="nav-links-container">
@@ -34,9 +26,7 @@ function BossNavBar() {
         <NavLink to="/sign_in">
           <button>Login</button>
         </NavLink>
-        <button type="button" onClick={() => handleLogout(setEmployee)}>
-          Log Out
-        </button>
+        <Logout setEmployee={setEmployee} />
       </div>
     </nav>
   );

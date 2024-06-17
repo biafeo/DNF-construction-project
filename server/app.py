@@ -122,7 +122,9 @@ class EmployeesById(Resource):
                 db.session.add(work_log)
             else:
                 for attr in data:
-                    if hasattr(employee, attr):
+                    if attr == 'password':
+                        employee.password_hash = data[attr] 
+                    elif hasattr(employee, attr):
                         setattr(employee, attr, data[attr])
             
             db.session.commit()

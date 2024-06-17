@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 
-function Login() {
+function Login({ onLogin }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
@@ -24,6 +24,7 @@ function Login() {
       })
       .then((data) => {
         console.log("Login successful:", data);
+        onLogin(true);
         if (data.isBoss) {
           history.push("/home");
         } else {
@@ -33,6 +34,7 @@ function Login() {
       .catch((err) => {
         console.error(err);
         setError("Invalid email or password");
+        onLogin(false);
       });
   }
 

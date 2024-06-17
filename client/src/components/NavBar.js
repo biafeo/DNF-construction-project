@@ -1,31 +1,34 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
-
-const handleLogout = (setEmployee) => {
-  fetch("/sign_out", {
-    method: "DELETE",
-  }).then((res) => {
-    if (res.ok) {
-      setEmployee(null);
-    }
-  });
-};
+import Logout from "./Logout";
 
 function NavBar() {
-  const [employee, setEmployee] = useState(null);
+  const [employeeId, setEmployeeId] = useState(null);
+
+  useEffect(() => {
+    const storedEmployee = JSON.parse(localStorage.getItem("employee"));
+    if (storedEmployee && storedEmployee.id) {
+      setEmployeeId(storedEmployee.id);
+    }
+  }, []);
 
   return (
     <nav className="navbar">
       <div className="nav-links-container">
-        <NavLink to="/" exact className="nav-link" activeClassName="active">
-          <button> Home</button>
+        <NavLink
+          to="/home/employee"
+          exact
+          className="nav-link"
+          activeClassName="active"
+        >
+          <button>Home</button>
         </NavLink>
-        <NavLink to="/sign_in" className="nav-link" activeClassName="active">
-          <button> Login</button>
-        </NavLink>
-        <button type="button" onClick={() => handleLogout(setEmployee)}>
-          Log Out
-        </button>
+        {employeeId && (
+          <NavLink to={`/employee/${employeeId}`}>
+            <button>My profile</button>
+          </NavLink>
+        )}
+        <Logout setEmployee={setEmployeeId} />
       </div>
     </nav>
   );

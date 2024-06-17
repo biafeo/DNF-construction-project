@@ -7,6 +7,7 @@ function EmployeeForm({ onAddEmployee }) {
   const [_password_hash, setPassword] = useState("");
   const [hourly_rate, setHourly_rate] = useState("");
   const [phone_number, setPhone_number] = useState("");
+  const [isBoss, setIsBoss] = useState("");
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -14,9 +15,10 @@ function EmployeeForm({ onAddEmployee }) {
       name,
       email,
       address,
-      _password_hash,
+      password: _password_hash,
       hourly_rate,
       phone_number,
+      isBoss: isBoss === "true",
     };
 
     fetch("/employees", {
@@ -40,6 +42,7 @@ function EmployeeForm({ onAddEmployee }) {
         setPassword("");
         setHourly_rate("");
         setPhone_number("");
+        setIsBoss("");
       });
   }
 
@@ -86,6 +89,11 @@ function EmployeeForm({ onAddEmployee }) {
         onChange={(e) => setPhone_number(e.target.value)}
         placeholder="Phone Number"
       />
+      <select value={isBoss} onChange={(e) => setIsBoss(e.target.value)}>
+        <option value="">is admin?</option>
+        <option value="true">Yes</option>
+        <option value="false">No</option>
+      </select>
       <br />
       <button type="submit">Add Employee</button>
     </form>

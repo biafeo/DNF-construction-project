@@ -5,6 +5,15 @@ import NavBar from "./NavBar";
 function EmployeePage() {
   const { id } = useParams();
   const [employee, setEmployee] = useState(null);
+  const [editMode, setEditMode] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    address: "",
+    password: "",
+    hourly_rate: "",
+    phone_number: "",
+  });
 
   useEffect(() => {
     fetch(`/employees/${id}`)
@@ -17,11 +26,24 @@ function EmployeePage() {
       .then((data) => {
         data.work_logs = data.work_logs.filter((log) => !log.paid);
         setEmployee(data);
+        setFormData({
+          name: data.name,
+          email: data.email,
+          address: data.address,
+          password: data.password,
+          hourly_rate: data.hourly_rate,
+          phone_number: data.phone_number,
+        });
       })
       .catch((error) => {
         console.error("Error fetching employee:", error);
       });
   }, [id]);
+
+  const handleEditEmployee = (updatedEmployee) => {
+    setEmployee(updatedEmployee);
+    setEditMode(false);
+  };
 
   const calculateTotalPaymentAndHours = (logs, hourly_rate) => {
     return logs.reduce(
@@ -34,6 +56,38 @@ function EmployeePage() {
       },
       { totalPayment: 0, totalHours: 0 }
     );
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    fetch(`/employees/${employee.id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    })
+      .then((r) => {
+        if (r.ok) {
+          return r.json();
+        }
+        throw new Error("Failed to update");
+      })
+      .then((updatedEmployee) => {
+        handleEditEmployee(updatedEmployee);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
   };
 
   if (!employee) {
@@ -54,6 +108,7 @@ function EmployeePage() {
       <div className="see-more-employee-card-container">
         <div>
           <h1>{name}</h1>
+          <button onClick={() => setEditMode(true)}>Edit Profile</button>
         </div>
         <div>
           <h3>Email: {email}</h3>
@@ -75,6 +130,53 @@ function EmployeePage() {
             ))}
           </ul>
         </div>
+        {editMode && (
+          <div>
+            <h3>Update {name}'s Information</h3>
+            <form onSubmit={handleSubmit} className="form">
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                placeholder="Name"
+              />
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="Email"
+              />
+              <input
+                type="text"
+                name="address"
+                value={formData.address}
+                onChange={handleChange}
+                placeholder="Address"
+              />
+              <input
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Password"
+              />
+
+              <input
+                type="text"
+                name="phone_number"
+                value={formData.phone_number}
+                onChange={handleChange}
+                placeholder="Phone Number"
+              />
+              <button type="submit">Update Employee</button>
+              <button type="button" onClick={() => setEditMode(false)}>
+                Cancel
+              </button>
+            </form>
+          </div>
+        )}
       </div>
     </>
   );
