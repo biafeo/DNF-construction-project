@@ -6,12 +6,19 @@ function SeeMoreProject() {
   const { id } = useParams();
   const [project, setProject] = useState(null);
 
-  useEffect(() => {
+  const fetchProject = () => {
     fetch(`/projects/${id}`)
-      .then((r) => r.json())
+      .then((response) => response.json())
       .then((data) => {
         setProject(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching project details:", error);
       });
+  };
+
+  useEffect(() => {
+    fetchProject();
   }, [id]);
 
   if (!project) {
@@ -31,21 +38,23 @@ function SeeMoreProject() {
   const profit = contract_payment - totalExpense;
 
   return (
-    <><BossNavBar/>
-    <div className="see-more-project-card-container">
-      <div>
-        <h1>{name}</h1>
+    <>
+      <BossNavBar />
+      <div className="see-more-project-card-container">
+        <div>
+          <h1>{name}</h1>
+        </div>
+        <div>
+          <h3>Location: {location}</h3>
+          <h3>Description: {description}</h3>
+          <h3>Material Expenses: {material_expenses}</h3>
+          <h3>Employee Expenses: {employee_expenses}</h3>
+          <h3>Contract Payment: {contract_payment}</h3>
+          <h3>Total Expenses: {totalExpense}</h3>
+          <h3>Profit: {profit}</h3>
+        </div>
       </div>
-      <div>
-        <h3>Location: {location}</h3>
-        <h3>Description: {description}</h3>
-        <h3>Material Expenses: {material_expenses}</h3>
-        <h3>Employee Expenses: {employee_expenses}</h3>
-        <h3>Contract Payment: {contract_payment}</h3>
-        <h3>Total Expenses: {totalExpense}</h3>
-        <h3>Profit: {profit}</h3>
-      </div>
-    </div></>
+    </>
   );
 }
 

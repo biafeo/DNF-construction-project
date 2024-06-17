@@ -96,7 +96,7 @@ class Project(db.Model, SerializerMixin):
     
     @hybrid_property
     def material_expenses(self):
-        return sum(expense.amount for expense in self.expenses if "material" in expense.description.lower())
+        return sum(expense.amount for expense in self.expenses)
     
     @hybrid_property
     def employee_expenses(self):

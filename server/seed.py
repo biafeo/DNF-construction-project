@@ -39,7 +39,7 @@ if __name__ == '__main__':
         christopher = Employee(
             name="Christopher",
             address='chrisaddress',
-            email="chrise@mail.com",
+            email="chris@email.com",
             phone_number=1111111111,
             hourly_rate=50,
             isBoss = True
