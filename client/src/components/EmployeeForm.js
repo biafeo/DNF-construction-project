@@ -1,12 +1,15 @@
-import { useState } from "react";
+import React, { useState, useContext } from "react";
+import { EmployeeContext } from "./EmployeeContext";
 
-function EmployeeForm({ onAddEmployee }) {
+function EmployeeForm() {
+  const { handleAddEmployee } = useContext(EmployeeContext);
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
   const [_password_hash, setPassword] = useState("");
-  const [hourly_rate, setHourly_rate] = useState("");
-  const [phone_number, setPhone_number] = useState("");
+  const [hourly_rate, setHourlyRate] = useState("");
+  const [phone_number, setPhoneNumber] = useState("");
   const [isBoss, setIsBoss] = useState("");
 
   function handleSubmit(e) {
@@ -35,13 +38,13 @@ function EmployeeForm({ onAddEmployee }) {
         throw new Error("Failed to add");
       })
       .then((newEmployee) => {
-        onAddEmployee(newEmployee);
+        handleAddEmployee(newEmployee);
         setName("");
         setEmail("");
         setAddress("");
         setPassword("");
-        setHourly_rate("");
-        setPhone_number("");
+        setHourlyRate("");
+        setPhoneNumber("");
         setIsBoss("");
       });
   }
@@ -79,14 +82,14 @@ function EmployeeForm({ onAddEmployee }) {
       <input
         type="text"
         value={hourly_rate}
-        onChange={(e) => setHourly_rate(e.target.value)}
+        onChange={(e) => setHourlyRate(e.target.value)}
         placeholder="Hourly Rate"
       />
       <br />
       <input
         type="text"
         value={phone_number}
-        onChange={(e) => setPhone_number(e.target.value)}
+        onChange={(e) => setPhoneNumber(e.target.value)}
         placeholder="Phone Number"
       />
       <select value={isBoss} onChange={(e) => setIsBoss(e.target.value)}>

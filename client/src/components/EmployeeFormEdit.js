@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 
 function EmployeeFormEdit({ employee, onEditEmployee }) {
-  const [name, setName] = useState(employee.name);
-  const [email, setEmail] = useState(employee.email);
-  const [address, setAddress] = useState(employee.address);
-  const [password, setPassword] = useState(employee.password);
-  const [hourly_rate, setHourlyRate] = useState(employee.hourly_rate);
-  const [phone_number, setPhoneNumber] = useState(employee.phone_number);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [address, setAddress] = useState("");
+  const [password, setPassword] = useState("");
+  const [hourly_rate, setHourlyRate] = useState("");
+  const [phone_number, setPhoneNumber] = useState("");
 
   useEffect(() => {
     if (employee) {
@@ -50,6 +50,9 @@ function EmployeeFormEdit({ employee, onEditEmployee }) {
       .catch((error) => {
         console.error(error);
       });
+  }
+  if (!employee) {
+    return null;
   }
 
   return (

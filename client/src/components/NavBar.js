@@ -1,19 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import Logout from "./Logout";
+import "../NavBar.css";
 
-function NavBar() {
-  const [employeeId, setEmployeeId] = useState(null);
-
-  useEffect(() => {
-    const storedEmployee = JSON.parse(localStorage.getItem("employee"));
-    if (storedEmployee && storedEmployee.id) {
-      setEmployeeId(storedEmployee.id);
-    }
-  }, []);
-
+function NavBar({ logout, user }) {
   return (
     <nav className="navbar">
+      <img src="../logoDNF.png" alt="Company Logo" className="nav-logo" />
       <div className="nav-links-container">
         <NavLink
           to="/home/employee"
@@ -21,14 +14,14 @@ function NavBar() {
           className="nav-link"
           activeClassName="active"
         >
-          <button>Home</button>
+          <button className="nav-link button">Home</button>
         </NavLink>
-        {employeeId && (
-          <NavLink to={`/employee/${employeeId}`}>
-            <button>My profile</button>
+        {
+          <NavLink to={`/employee/${user.id}`}>
+            <button className="nav-link button">My profile</button>
           </NavLink>
-        )}
-        <Logout setEmployee={setEmployeeId} />
+        }
+        <Logout logout={logout} />
       </div>
     </nav>
   );

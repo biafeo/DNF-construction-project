@@ -39,7 +39,6 @@ function SeeMoreProject() {
 
   return (
     <>
-      <BossNavBar />
       <div className="see-more-project-card-container">
         <div>
           <h1>{name}</h1>

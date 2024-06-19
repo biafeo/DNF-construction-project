@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import Logout from "./Logout";
+import "../NavBar.css";
 
-function BossNavBar() {
-  const [employee, setEmployee] = useState(null);
-
+function BossNavBar({ logout }) {
   return (
     <nav className="navbar">
+      <img src="../logoDNF.png" alt="Company Logo" className="nav-logo" />
+
       <div className="nav-links-container">
         <NavLink to="/home" exact className="nav-link" activeClassName="active">
           <button>Home</button>
@@ -23,10 +24,8 @@ function BossNavBar() {
         <NavLink to="/worklogs" className="nav-link" activeClassName="active">
           <button>Worklogs</button>
         </NavLink>
-        <NavLink to="/sign_in">
-          <button>Login</button>
-        </NavLink>
-        <Logout setEmployee={setEmployee} />
+
+        <Logout logout={logout} />
       </div>
     </nav>
   );

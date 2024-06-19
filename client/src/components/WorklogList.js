@@ -53,7 +53,6 @@ function WorklogList() {
 
   return (
     <>
-      <BossNavBar />
       <div className="worklog-container">
         <h1>Worklogs</h1>
         <div className="worklogs-list">

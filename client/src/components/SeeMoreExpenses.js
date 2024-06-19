@@ -29,7 +29,6 @@ function SeeMoreExpenses() {
 
   return (
     <>
-      <BossNavBar />
       <div className="see-more-expense-card-container">
         <div>
           <h1>{description}</h1>

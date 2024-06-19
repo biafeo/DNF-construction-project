@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
-import NavBar from "./NavBar";
+import { Redirect } from "react-router-dom";
 
-function EmployeePage() {
+function EmployeePage({ user, setUser }) {
   const { id } = useParams();
   const [employee, setEmployee] = useState(null);
   const [editMode, setEditMode] = useState(false);
@@ -14,7 +14,6 @@ function EmployeePage() {
     hourly_rate: "",
     phone_number: "",
   });
-
   useEffect(() => {
     fetch(`/employees/${id}`)
       .then((r) => {
@@ -43,7 +42,12 @@ function EmployeePage() {
   const handleEditEmployee = (updatedEmployee) => {
     setEmployee(updatedEmployee);
     setEditMode(false);
+    setUser(updatedEmployee);
   };
+
+  if (user.id != id) {
+    return <Redirect to="/home/employee" />;
+  }
 
   const calculateTotalPaymentAndHours = (logs, hourly_rate) => {
     return logs.reduce(
@@ -104,7 +108,6 @@ function EmployeePage() {
 
   return (
     <>
-      <NavBar />
       <div className="see-more-employee-card-container">
         <div>
           <h1>{name}</h1>

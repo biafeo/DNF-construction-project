@@ -39,7 +39,6 @@ function ExpensesList() {
 
   return (
     <>
-      <BossNavBar />
       <div className="expense-container">
         <h1>My Expenses</h1>
         <div className="expenses-list">

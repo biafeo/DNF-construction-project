@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import BossNavBar from "./BossNavBar";
+import EmployeeFormEdit from "./EmployeeFormEdit";
 
 function SeeMoreEmployee() {
   const { id } = useParams();
@@ -9,6 +9,7 @@ function SeeMoreEmployee() {
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [selectedProjectName, setSelectedProjectName] = useState("");
+  const [showEditForm, setShowEditForm] = useState(false);
 
   useEffect(() => {
     fetch(`/employees/${id}`)
@@ -131,7 +132,6 @@ function SeeMoreEmployee() {
 
   return (
     <>
-      <BossNavBar />
       <div className="see-more-employee-card-container">
         <div>
           <h1>{name}</h1>
@@ -203,6 +203,12 @@ function SeeMoreEmployee() {
           <br />
           <button type="submit">Add Hours</button>
         </form>
+        <button onClick={() => setShowEditForm(!showEditForm)}>
+          {showEditForm ? "Hide Edit Form" : "Show Edit Form"}
+        </button>
+        {showEditForm && (
+          <EmployeeFormEdit employee={employee} onEditEmployee={setEmployee} />
+        )}
       </div>
     </>
   );
