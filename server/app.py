@@ -453,10 +453,14 @@ class ExpensesById(Resource):
         db.session.delete(expense)
         db.session.commit()
         return make_response('', 204)
+    
+@app.errorhandler(404)
+def not_found(e):
+    return render_template("index.html")
 
 api.add_resource(ExpensesById, '/expenses/<int:id>')
 
-
+app.register_blueprint(api_bp, url_prefix='/api')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
