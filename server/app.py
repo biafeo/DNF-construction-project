@@ -1,6 +1,6 @@
 from config import app, db, api, os
 from flask_restful import Resource
-from flask import Flask, make_response, jsonify, request, session
+from flask import Flask, make_response, jsonify, request, session, render_template
 from models import Employee, WorkLog, Expense, Project
 from flask_cors import CORS
 from flask_migrate import Migrate
@@ -13,7 +13,7 @@ mail = Mail(app)
 
 @app.route('/')
 def index():
-    return '<h1>DNF construction</h1>'
+    return render_template("index.html")
 
 
 class Employees(Resource):

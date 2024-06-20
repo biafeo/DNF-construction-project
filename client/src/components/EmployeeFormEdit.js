@@ -57,7 +57,7 @@ function EmployeeFormEdit({ employee, onEditEmployee }) {
 
   return (
     <div>
-      <form onSubmit={handleSubmit} className="form-geral">
+      <form onSubmit={handleSubmit}>
         <input
           type="text"
           value={name}

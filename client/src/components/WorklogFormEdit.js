@@ -17,7 +17,7 @@ function WorklogFormEdit({ worklog, onEditWorklog }) {
   }, [worklog]);
 
   useEffect(() => {
-    fetch("/projects")
+    fetch("/api/projects")
       .then((response) => response.json())
       .then((data) => setProjects(data))
       .catch((error) => console.error("Error fetching projects:", error));

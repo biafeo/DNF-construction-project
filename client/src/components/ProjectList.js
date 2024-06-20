@@ -9,7 +9,7 @@ function ProjectList() {
   const [editProject, setEditProject] = useState(null);
 
   useEffect(() => {
-    fetch("/projects")
+    fetch("/api/projects")
       .then((r) => r.json())
       .then((data) => {
         setProjects(data);

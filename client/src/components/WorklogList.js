@@ -7,7 +7,7 @@ function WorklogList() {
   const [editWorklogId, setEditWorklogId] = useState(null);
 
   useEffect(() => {
-    fetch("/worklogs")
+    fetch("/api/worklogs")
       .then((r) => r.json())
       .then((data) => {
         setWorklogs(data);

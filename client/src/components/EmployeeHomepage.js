@@ -86,11 +86,11 @@ function EmployeeHomepage() {
             <p>Phone: (123) 456-7890</p>
           </div>
           <div className="contact">
-            <img src="/contact2.jpeg" alt="Email icon" />
+            <img src="/contact3.jpeg" alt="Email icon" />
             <p>Email: info@constructioncompany.com</p>
           </div>
           <div className="contact">
-            <img src="/contact3.jpeg" alt="Address icon" />
+            <img src="/contact2.jpeg" alt="Address icon" />
             <p>Address: 123 Main St, Anytown, USA</p>
           </div>
         </div>

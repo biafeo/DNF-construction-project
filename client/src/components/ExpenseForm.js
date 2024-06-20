@@ -7,7 +7,7 @@ function ExpenseForm({ onAddExpense, onExpenseSuccess }) {
   const [selectedProjectName, setSelectedProjectName] = useState("");
 
   useEffect(() => {
-    fetch("/projects")
+    fetch("/api/projects")
       .then((r) => r.json())
       .then((data) => {
         setProjects(data);
@@ -30,7 +30,7 @@ function ExpenseForm({ onAddExpense, onExpenseSuccess }) {
       project_id: selectedProject ? selectedProject.id : null,
     };
 
-    fetch("/expenses", {
+    fetch("/api/expenses", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

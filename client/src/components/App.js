@@ -26,7 +26,7 @@ function App() {
   const [user, setUser] = useState();
 
   const logout = () => {
-    fetch("/sign_out", {
+    fetch("/api/sign_out", {
       method: "DELETE",
     }).then((res) => {
       if (res.ok) {
@@ -36,7 +36,7 @@ function App() {
   };
 
   useEffect(() => {
-    fetch("/me")
+    fetch("/api/me")
       .then((r) => r.json())
       .then((user) => {
         if (user.id) {

@@ -21,7 +21,7 @@ function BossHomePage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetch("http://localhost:5555/send-email", {
+    fetch("/api/send-email", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -49,7 +49,7 @@ function BossHomePage() {
           <div className="welcome">
             <div className="welcome-text">
               <h2>Professional Construction Services</h2>
-              <div>
+              <p>
                 <div className="centered-block1">Residential Construction</div>
                 <div className="centered-block">
                   Custom homes, renovations, and additions.
@@ -66,7 +66,7 @@ function BossHomePage() {
                 <div className="centered-block">
                   Construction consulting and planning.
                 </div>
-              </div>
+              </p>
             </div>
           </div>
         </section>
@@ -78,13 +78,13 @@ function BossHomePage() {
             <div className="why-card">
               <strong>Experienced Team</strong>
               <br />
-              <img src="image0.png" alt="Experienced Team" />
+              <img src="/image0.png" alt="Experienced Team" />
               <p>Skilled professionals with years of industry experience.</p>
             </div>
             <div className="why-card">
               <strong>Quality Assurance</strong>
               <br />
-              <img src="image1.png" alt="Quality Assurance" />
+              <img src="/image1.png" alt="Quality Assurance" />
               <p>
                 Commitment to high standards and meticulous attention to detail.
               </p>
@@ -92,7 +92,7 @@ function BossHomePage() {
             <div className="why-card">
               <strong>Timely Completion</strong>
               <br />
-              <img src="image2.png" alt="Timely completion" />
+              <img src="/image2.png" alt="Timely completion" />
               <p>
                 Proven track record of completing projects on time and within
                 budget.
@@ -101,7 +101,7 @@ function BossHomePage() {
             <div className="why-card">
               <strong>Customer Focused</strong>
               <br />
-              <img src="image3.png" alt="Customer Focused" />
+              <img src="/image3.png" alt="Customer Focused" />
               <p>
                 Personalized services tailored to meet individual client needs.
               </p>
@@ -115,15 +115,15 @@ function BossHomePage() {
       <div className="contact-form-container">
         <div className="contact-container">
           <div className="contact">
-            <img src="contact1.jpeg" alt="Phone icon" />
+            <img src="/contact1.jpeg" alt="Phone icon" />
             <p>Phone: (123) 456-7890</p>
           </div>
           <div className="contact">
-            <img src="contact2.jpeg" alt="Email icon" />
+            <img src="/contact3.jpeg" alt="Email icon" />
             <p>Email: info@constructioncompany.com</p>
           </div>
           <div className="contact">
-            <img src="contact3.jpeg" alt="Address icon" />
+            <img src="/contact2.jpeg" alt="Address icon" />
             <p>Address: 123 Main St, Anytown, USA</p>
           </div>
         </div>
@@ -132,35 +132,15 @@ function BossHomePage() {
             Contact Us Today
           </button>
           {isFormVisible && (
-            <form className="contact-form" onSubmit={handleSubmit}>
+            <form className="contact-form">
               <label>
-                <input
-                  type="text"
-                  name="name"
-                  placeholder="Name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                />
+                <input type="text" placeholder="Name" required />
               </label>
               <label>
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="Email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                />
+                <input type="email" placeholder="Email" required />
               </label>
               <label>
-                <textarea
-                  name="message"
-                  placeholder="Message"
-                  value={formData.message}
-                  onChange={handleChange}
-                  required
-                />
+                <textarea placeholder="Message" required />
               </label>
               <div className="button-container">
                 <button type="submit" className="contact-submit-button">
@@ -181,5 +161,4 @@ function BossHomePage() {
     </>
   );
 }
-
 export default BossHomePage;

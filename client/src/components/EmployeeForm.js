@@ -39,7 +39,7 @@ function EmployeeForm() {
       isBoss: isBoss === "true",
     };
 
-    fetch("/employees", {
+    fetch("/api/employees", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

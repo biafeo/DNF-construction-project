@@ -8,7 +8,7 @@ export const EmployeeProvider = ({ children }) => {
   const [isEditing, setIsEditing] = useState(false);
 
   const getEmployees = () => {
-    fetch("/employees")
+    fetch("/api/employees")
       .then((r) => r.json())
       .then((data) => {
         setEmployees(data);

@@ -10,7 +10,7 @@ function Login({ setUser }) {
   function handleSubmit(e) {
     e.preventDefault();
 
-    fetch("/sign_in", {
+    fetch("/api/sign_in", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),

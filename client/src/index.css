@@ -254,10 +254,11 @@ form button:hover {
   background-color: rgba(32, 33, 43, 1);
   color: #fff;
   font-family: "League Spartan", sans-serif;
-  font-weight: 600;
-  max-width: 250px;
-  padding: 10px;
-  margin-bottom: 10px;
+  font-weight: 700;
+  max-width: 350px; /* Increased from 250px to 350px */
+  flex-basis: 300px; /* Added to set a minimum size */
+  padding: 20px; /* Increased padding for better spacing */
+  margin-bottom: 20px;
   text-align: center;
   box-shadow: rgba(213, 217, 217, 0.5) 0 2px 5px 0;
   border: 1px solid #ccc;

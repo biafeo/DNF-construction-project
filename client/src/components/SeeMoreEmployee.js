@@ -23,7 +23,7 @@ function SeeMoreEmployee() {
         console.error("Error fetching employee:", error);
       });
 
-    fetch("/projects")
+    fetch("/api/projects")
       .then((r) => r.json())
       .then((data) => {
         setProjects(data);
@@ -122,6 +122,7 @@ function SeeMoreEmployee() {
   if (!employee) {
     return <div>Loading...</div>;
   }
+
   const calculatePaymentForLogs = (logs, hourly_rate) => {
     return logs.map((log) => ({
       ...log,
@@ -131,7 +132,6 @@ function SeeMoreEmployee() {
 
   const { name, email, address, hourly_rate, phone_number, work_logs } =
     employee;
-
   const { totalPayment, totalHours } = calculateTotalPaymentAndHours(
     work_logs,
     hourly_rate
@@ -159,7 +159,7 @@ function SeeMoreEmployee() {
             <img src="/employee4.jpeg" alt="Experienced Team" />
             <h3>${hourly_rate}/hr</h3>
           </div>
-          <div className="edit-employee-form">
+          <div>
             <button
               onClick={() => setShowEditForm(!showEditForm)}
               className="toggle-button"
@@ -169,14 +169,19 @@ function SeeMoreEmployee() {
             {showEditForm && (
               <EmployeeFormEdit
                 employee={employee}
-                onEditEmployee={setEmployee}
+                onEditEmployee={(updatedEmployee) => {
+                  updatedEmployee.work_logs = updatedEmployee.work_logs.filter(
+                    (log) => !log.paid
+                  );
+                  setEmployee(updatedEmployee);
+                  setShowEditForm(false);
+                }}
               />
             )}
           </div>
         </div>
       </div>
       <div className="worklogs">
-        <h3>Work Logs</h3>
         <table>
           <thead>
             <tr>
@@ -219,7 +224,7 @@ function SeeMoreEmployee() {
             </tr>
           </tbody>
         </table>
-        <form className="form-geral" onSubmit={handleAddHours}>
+        <form className="form-hours" onSubmit={handleAddHours}>
           <label>
             Worked from:
             <input

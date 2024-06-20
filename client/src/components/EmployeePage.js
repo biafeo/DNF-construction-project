@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useParams, Redirect } from "react-router-dom";
 import "./employeepage.css";
+
 function EmployeePage({ user, setUser }) {
   const { id } = useParams();
   const [employee, setEmployee] = useState(null);
@@ -40,6 +41,9 @@ function EmployeePage({ user, setUser }) {
   }, [id]);
 
   const handleEditEmployee = (updatedEmployee) => {
+    updatedEmployee.work_logs = updatedEmployee.work_logs.filter(
+      (log) => !log.paid
+    );
     setEmployee(updatedEmployee);
     setEditMode(false);
     setUser(updatedEmployee);
@@ -61,12 +65,14 @@ function EmployeePage({ user, setUser }) {
       { totalPayment: 0, totalHours: 0 }
     );
   };
+
   const calculatePaymentForLogs = (logs, hourly_rate) => {
     return logs.map((log) => ({
       ...log,
       payment: log.hours_worked * hourly_rate,
     }));
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -189,7 +195,6 @@ function EmployeePage({ user, setUser }) {
           )}
         </div>
         <div className="worklogs">
-          <h3>Work Logs</h3>
           <table>
             <thead>
               <tr>

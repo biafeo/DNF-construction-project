@@ -17,7 +17,7 @@ function ExpenseFormEdit({ expense, onEditExpense }) {
   }, [expense]);
 
   useEffect(() => {
-    fetch("/projects")
+    fetch("/api/projects")
       .then((r) => r.json())
       .then((data) => {
         setProjects(data);
@@ -64,7 +64,7 @@ function ExpenseFormEdit({ expense, onEditExpense }) {
 
   return (
     <div>
-      <form onSubmit={handleSubmit} className="form-geral">
+      <form onSubmit={handleSubmit}>
         <input
           type="number"
           value={amount}

@@ -12,7 +12,7 @@ function ExpensesList() {
     setFormVisible(!isFormVisible);
   };
   useEffect(() => {
-    fetch("/expenses")
+    fetch("/api/expenses")
       .then((r) => r.json())
       .then((data) => {
         setExpenses(data);
@@ -69,7 +69,7 @@ function ExpensesList() {
           />
         )}
         <button onClick={toggleForm} className="toggle-button">
-          {isFormVisible ? "Cancel" : "Add Project"}
+          {isFormVisible ? "Cancel" : "Add Expense"}
         </button>
         {isFormVisible && <ExpenseForm onAddExpense={handleAddExpense} />}
       </div>

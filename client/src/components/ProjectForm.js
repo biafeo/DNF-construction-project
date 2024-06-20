@@ -15,7 +15,7 @@ function ProjectForm({ onAddProject }) {
       contract_payment,
     };
 
-    fetch("/projects", {
+    fetch("/api/projects", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
