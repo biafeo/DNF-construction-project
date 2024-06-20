@@ -1,0 +1,116 @@
+.employee-page-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 20px;
+}
+
+.worklogs {
+  flex: 1;
+}
+
+.employee-info {
+  font-family: "League Spartan", sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 100px 10px;
+  padding: 20px;
+  box-sizing: border-box;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(220, 164, 60, 1);
+  background-color: #fff;
+  max-width: 300px;
+  width: 100%;
+}
+.form-profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 10px;
+  box-sizing: border-box;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(220, 164, 60, 1);
+  background-color: #fff;
+  max-width: 300px;
+  width: 100%;
+  margin-top: -70px;
+}
+.form-profile input,
+.form-profile select,
+.form-profile button,
+.form-profile textarea {
+  width: 100%;
+  padding: 12px;
+  margin: 5px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.form-profile button {
+  background: rgba(32, 33, 43, 1);
+  color: white;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 10px;
+  transition: color 0.3s;
+}
+
+.form-profile button:hover {
+  color: rgba(220, 164, 60, 1);
+  border-bottom: 2px solid rgba(220, 164, 60, 1);
+}
+.profile-card {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.profile-card img {
+  width: 30px;
+  height: auto;
+  margin-right: 10px;
+}
+
+.profile-card h3 {
+  margin: 0;
+}
+
+.worklogs table {
+  font-family: "League Spartan", sans-serif;
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 57px;
+  max-width: 700px;
+  margin-left: 10%;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.worklogs th,
+.worklogs td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.worklogs th {
+  background-color: rgba(32, 33, 43, 1);
+  color: white;
+}
+
+.worklogs td {
+  background-color: #fff;
+  color: black;
+  border-radius: 8px;
+}

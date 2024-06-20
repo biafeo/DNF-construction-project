@@ -1,10 +1,13 @@
-from config import app, db, api
+from config import app, db, api, os
 from flask_restful import Resource
 from flask import Flask, make_response, jsonify, request, session
 from models import Employee, WorkLog, Expense, Project
 from flask_cors import CORS
 from flask_migrate import Migrate
 from datetime import datetime
+from flask_mail import Mail, Message
+import smtplib
+mail = Mail(app)
 
 
 
@@ -76,6 +79,28 @@ def me():
     return make_response(jsonify(user.to_dict()), 200)
 
 
+@app.route('/send-email', methods=['POST'])
+def send_email():
+    data = request.get_json()
+    name = data.get('name')
+    email = data.get('email')
+    message_body = data.get('message')
+
+    msg = Message(subject=f"New message from {name}",
+                  recipients=[os.getenv('MAIL_RECIPIENT')],
+                  body=message_body,
+                  sender=email)
+    try:
+        mail.send(msg)
+        return {"message": "Email sent successfully"}, 200
+    except smtplib.SMTPException as e:
+        print(f"SMTP error: {str(e)}")
+        return {"message": f"Failed to send email: {str(e)}"}, 500
+    except Exception as e:
+        print(f"Failed to send email: {str(e)}")
+        return {"message": f"Failed to send email: {str(e)}"}, 500
+    
+    
 class EmployeesById(Resource):
     def get(self, id):
         user_id = session.get("employee_id")

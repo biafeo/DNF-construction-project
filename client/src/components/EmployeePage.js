@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useParams } from "react-router-dom";
-import { Redirect } from "react-router-dom";
-
+import { useParams, Redirect } from "react-router-dom";
+import "./employeepage.css";
 function EmployeePage({ user, setUser }) {
   const { id } = useParams();
   const [employee, setEmployee] = useState(null);
@@ -14,6 +13,7 @@ function EmployeePage({ user, setUser }) {
     hourly_rate: "",
     phone_number: "",
   });
+
   useEffect(() => {
     fetch(`/employees/${id}`)
       .then((r) => {
@@ -61,7 +61,12 @@ function EmployeePage({ user, setUser }) {
       { totalPayment: 0, totalHours: 0 }
     );
   };
-
+  const calculatePaymentForLogs = (logs, hourly_rate) => {
+    return logs.map((log) => ({
+      ...log,
+      payment: log.hours_worked * hourly_rate,
+    }));
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -105,81 +110,119 @@ function EmployeePage({ user, setUser }) {
     work_logs,
     hourly_rate
   );
+  const workLogsWithPayments = calculatePaymentForLogs(work_logs, hourly_rate);
 
   return (
     <>
-      <div className="see-more-employee-card-container">
-        <div>
-          <h1>{name}</h1>
-          <button onClick={() => setEditMode(true)}>Edit Profile</button>
-        </div>
-        <div>
-          <h3>Email: {email}</h3>
-          <h3>Address: {address}</h3>
-          <h3>Hourly Rate: {hourly_rate}</h3>
-          <h3>Phone number: {phone_number}</h3>
-          <h3>Hours Worked: {totalHours}</h3>
-          <h3>Total Payment: {totalPayment}</h3>
-        </div>
-        <div>
-          <h3>Work Logs</h3>
-          <ul>
-            {work_logs.map((log) => (
-              <li key={log.id}>
-                <p>Date: {log.date}</p>
-                <p>Project: {log.project_name}</p>
-                <p>Hours Worked: {log.hours_worked}</p>
-              </li>
-            ))}
-          </ul>
-        </div>
-        {editMode && (
-          <div>
-            <h3>Update {name}'s Information</h3>
-            <form onSubmit={handleSubmit} className="form">
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="Name"
-              />
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="Email"
-              />
-              <input
-                type="text"
-                name="address"
-                value={formData.address}
-                onChange={handleChange}
-                placeholder="Address"
-              />
-              <input
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                placeholder="Password"
-              />
-
-              <input
-                type="text"
-                name="phone_number"
-                value={formData.phone_number}
-                onChange={handleChange}
-                placeholder="Phone Number"
-              />
-              <button type="submit">Update Employee</button>
-              <button type="button" onClick={() => setEditMode(false)}>
-                Cancel
-              </button>
-            </form>
+      <div className="employee-page-container">
+        <div className="see-more-employee-card-container">
+          <div className="employee-info">
+            <div>
+              <h1>{name}</h1>
+            </div>
+            <div>
+              <div className="profile-card">
+                <img src="/employee1.jpeg" alt="Experienced Team" />
+                <h3>{email}</h3>
+              </div>
+              <div className="profile-card">
+                <img src="/employee2.jpeg" alt="Experienced Team" />
+                <h3>{phone_number}</h3>
+              </div>
+              <div className="profile-card">
+                <img src="/employee3.jpeg" alt="Experienced Team" />
+                <h3>{address}</h3>
+              </div>
+              <div className="profile-card">
+                <img src="/employee4.jpeg" alt="Experienced Team" />
+                <h3>${hourly_rate}/hr</h3>
+              </div>
+            </div>
+            <button className="toggle-button" onClick={() => setEditMode(true)}>
+              Edit Profile
+            </button>
           </div>
-        )}
+          {editMode && (
+            <div className="form-profile">
+              <form onSubmit={handleSubmit} className="form profile-edit-form">
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  placeholder="Name"
+                />
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="Email"
+                />
+                <input
+                  type="text"
+                  name="address"
+                  value={formData.address}
+                  onChange={handleChange}
+                  placeholder="Address"
+                />
+                <input
+                  type="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  placeholder="Password"
+                />
+                <input
+                  type="text"
+                  name="phone_number"
+                  value={formData.phone_number}
+                  onChange={handleChange}
+                  placeholder="Phone Number"
+                />
+                <button type="submit">Update Employee</button>
+                <button type="button" onClick={() => setEditMode(false)}>
+                  Cancel
+                </button>
+              </form>
+            </div>
+          )}
+        </div>
+        <div className="worklogs">
+          <h3>Work Logs</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Project</th>
+                <th>Hours Worked</th>
+                <th>Payment</th>
+              </tr>
+            </thead>
+            <tbody>
+              {workLogsWithPayments.map((log) => (
+                <tr key={log.id}>
+                  <td>{log.date}</td>
+                  <td>{log.project_name}</td>
+                  <td>{log.hours_worked}</td>
+                  <td>${log.payment.toFixed(2)}</td>
+                </tr>
+              ))}
+
+              <tr>
+                <td colSpan="2">
+                  <strong>Total</strong>
+                </td>
+                <td>
+                  <strong>{totalHours}</strong>
+                </td>
+                <td>
+                  <strong>${totalPayment.toFixed(2)}</strong>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </>
   );

@@ -4,7 +4,7 @@ import BossNavBar from "./BossNavBar";
 
 function WorklogList() {
   const [worklogs, setWorklogs] = useState([]);
-  const [editWorklog, setEditWorklog] = useState(null);
+  const [editWorklogId, setEditWorklogId] = useState(null);
 
   useEffect(() => {
     fetch("/worklogs")
@@ -20,7 +20,7 @@ function WorklogList() {
         worklog.id === updatedWorklog.id ? updatedWorklog : worklog
       )
     );
-    setEditWorklog(null);
+    setEditWorklogId(null);
   };
 
   const handleDeleteWorklog = (worklogId) => {
@@ -54,33 +54,47 @@ function WorklogList() {
   return (
     <>
       <div className="worklog-container">
-        <h1>Worklogs</h1>
         <div className="worklogs-list">
           {worklogs.map((worklog) => (
             <div key={worklog.id} className="worklog-card">
-              <h3>Employee: {worklog.employee_name}</h3>
-              <h3>Project: {worklog.project_name}</h3>
-              <h3>Hours Worked: {worklog.hours_worked}</h3>
-              <h3>Date: {worklog.date}</h3>
+              <h3>{worklog.employee_name}</h3>
+              <h3>{worklog.project_name}</h3>
+              <h3>{worklog.hours_worked}hrs</h3>
+              <h3>{worklog.date}</h3>
               <h3>Paid: {worklog.paid ? "Yes" : "No"}</h3>
               <div className="button-container">
-                <button onClick={() => setEditWorklog(worklog)}>Edit</button>
-                <button onClick={() => handleDeleteWorklog(worklog.id)}>
+                <button
+                  className="button"
+                  onClick={() =>
+                    setEditWorklogId(
+                      editWorklogId === worklog.id ? null : worklog.id
+                    )
+                  }
+                >
+                  {editWorklogId === worklog.id ? "Cancel" : "Edit"}
+                </button>
+                {editWorklogId === worklog.id && (
+                  <WorklogFormEdit
+                    onEditWorklog={handleEditWorklog}
+                    worklog={worklog}
+                  />
+                )}
+                <button
+                  className="button"
+                  onClick={() => handleDeleteWorklog(worklog.id)}
+                >
                   Delete
                 </button>
-                <button onClick={() => handleTogglePaidStatus(worklog)}>
+                <button
+                  className="button"
+                  onClick={() => handleTogglePaidStatus(worklog)}
+                >
                   {worklog.paid ? "Unmark as Paid" : "Mark as Paid"}
                 </button>
               </div>
             </div>
           ))}
         </div>
-        {editWorklog && (
-          <WorklogFormEdit
-            onEditWorklog={handleEditWorklog}
-            worklog={editWorklog}
-          />
-        )}
       </div>
     </>
   );

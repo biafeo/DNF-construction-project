@@ -55,7 +55,7 @@ function ExpenseForm({ onAddExpense, onExpenseSuccess }) {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="form-geral" onSubmit={handleSubmit}>
       <input
         type="number"
         value={amount}

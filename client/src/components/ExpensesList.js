@@ -2,12 +2,15 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import ExpenseForm from "./ExpenseForm";
 import ExpenseFormEdit from "./ExpenseFormEdit";
-import BossNavBar from "./BossNavBar";
 
 function ExpensesList() {
   const [expenses, setExpenses] = useState([]);
   const [editExpense, setEditExpense] = useState(null);
+  const [isFormVisible, setFormVisible] = useState(false);
 
+  const toggleForm = () => {
+    setFormVisible(!isFormVisible);
+  };
   useEffect(() => {
     fetch("/expenses")
       .then((r) => r.json())
@@ -40,17 +43,19 @@ function ExpensesList() {
   return (
     <>
       <div className="expense-container">
-        <h1>My Expenses</h1>
         <div className="expenses-list">
           {expenses.map((expense) => (
             <div key={expense.id} className="expense-card">
               <h3>{expense.description}</h3>
               <div className="button-container">
                 <Link to={`/expenses/${expense.id}`} className="button-link">
-                  <button>View Expense Details</button>
+                  <button className="button">View Expense Details</button>
                 </Link>
-                <button onClick={() => setEditExpense(expense)}>Edit</button>
-                <button onClick={() => handleDeleteExpense(expense.id)}>
+
+                <button
+                  className="button"
+                  onClick={() => handleDeleteExpense(expense.id)}
+                >
                   Delete
                 </button>
               </div>
@@ -63,8 +68,10 @@ function ExpensesList() {
             expense={editExpense}
           />
         )}
-        <h3>Add Expense:</h3>
-        <ExpenseForm onAddExpense={handleAddExpense} />
+        <button onClick={toggleForm} className="toggle-button">
+          {isFormVisible ? "Cancel" : "Add Project"}
+        </button>
+        {isFormVisible && <ExpenseForm onAddExpense={handleAddExpense} />}
       </div>
     </>
   );

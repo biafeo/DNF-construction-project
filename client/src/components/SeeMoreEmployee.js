@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import EmployeeFormEdit from "./EmployeeFormEdit";
+import "./SeeMoreEmployee.css";
 
 function SeeMoreEmployee() {
   const { id } = useParams();
@@ -121,6 +122,12 @@ function SeeMoreEmployee() {
   if (!employee) {
     return <div>Loading...</div>;
   }
+  const calculatePaymentForLogs = (logs, hourly_rate) => {
+    return logs.map((log) => ({
+      ...log,
+      payment: log.hours_worked * hourly_rate,
+    }));
+  };
 
   const { name, email, address, hourly_rate, phone_number, work_logs } =
     employee;
@@ -129,43 +136,90 @@ function SeeMoreEmployee() {
     work_logs,
     hourly_rate
   );
+  const workLogsWithPayments = calculatePaymentForLogs(work_logs, hourly_rate);
 
   return (
-    <>
-      <div className="see-more-employee-card-container">
-        <div>
-          <h1>{name}</h1>
+    <div className="employee-page-container">
+      <div className="employee-info">
+        <h1>{name}</h1>
+        <div className="profile-card-container">
+          <div className="profile-card">
+            <img src="/employee1.jpeg" alt="Experienced Team" />
+            <h3>{email}</h3>
+          </div>
+          <div className="profile-card">
+            <img src="/employee2.jpeg" alt="Experienced Team" />
+            <h3>{phone_number}</h3>
+          </div>
+          <div className="profile-card">
+            <img src="/employee3.jpeg" alt="Experienced Team" />
+            <h3>{address}</h3>
+          </div>
+          <div className="profile-card">
+            <img src="/employee4.jpeg" alt="Experienced Team" />
+            <h3>${hourly_rate}/hr</h3>
+          </div>
+          <div className="edit-employee-form">
+            <button
+              onClick={() => setShowEditForm(!showEditForm)}
+              className="toggle-button"
+            >
+              {showEditForm ? "Cancel" : "Edit"}
+            </button>
+            {showEditForm && (
+              <EmployeeFormEdit
+                employee={employee}
+                onEditEmployee={setEmployee}
+              />
+            )}
+          </div>
         </div>
-        <div>
-          <h3>Email: {email}</h3>
-          <h3>Address: {address}</h3>
-          <h3>Hourly Rate: {hourly_rate}</h3>
-          <h3>Phone number: {phone_number}</h3>
-          <h3>Hours Worked: {totalHours}</h3>
-          <h3>Total Payment: {totalPayment}</h3>
-        </div>
-        <div>
-          <h3>Work Logs</h3>
-          <ul>
-            {work_logs.map((log) => (
-              <li key={log.id}>
-                <p>Date: {log.date}</p>
-                <p>Project: {log.project_name}</p>
-                <p>Hours Worked: {log.hours_worked}</p>
-                <p>Paid: {log.paid ? "Yes" : "No"}</p>
+      </div>
+      <div className="worklogs">
+        <h3>Work Logs</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Project</th>
+              <th>Hours Worked</th>
+              <th>Payment</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {workLogsWithPayments.map((log) => (
+              <tr key={log.id}>
+                <td>{log.date}</td>
+                <td>{log.project_name}</td>
+                <td>{log.hours_worked}</td>
+                <td>${log.payment.toFixed(2)}</td>
                 {!log.paid && (
-                  <button
-                    onClick={() => handleTogglePaidStatus(log.id, log.paid)}
-                  >
-                    Mark as Paid
-                  </button>
+                  <td>
+                    <button
+                      onClick={() => handleTogglePaidStatus(log.id, log.paid)}
+                      className="paid-button"
+                    >
+                      Mark as Paid
+                    </button>
+                  </td>
                 )}
-              </li>
+              </tr>
             ))}
-          </ul>
-        </div>
-        <form onSubmit={handleAddHours}>
-          <h3>Add Hours Worked</h3>
+            <tr>
+              <td colSpan="2">
+                <strong>Total</strong>
+              </td>
+              <td>
+                <strong>{totalHours}</strong>
+              </td>
+              <td>
+                <strong>${totalPayment.toFixed(2)}</strong>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <form className="form-geral" onSubmit={handleAddHours}>
           <label>
             Worked from:
             <input
@@ -191,6 +245,7 @@ function SeeMoreEmployee() {
             <select
               value={selectedProjectName}
               onChange={(e) => setSelectedProjectName(e.target.value)}
+              required
             >
               <option value="">Select a project</option>
               {projects.map((project) => (
@@ -201,16 +256,12 @@ function SeeMoreEmployee() {
             </select>
           </label>
           <br />
-          <button type="submit">Add Hours</button>
+          <button type="submit" className="add-hours-button">
+            Add Hours
+          </button>
         </form>
-        <button onClick={() => setShowEditForm(!showEditForm)}>
-          {showEditForm ? "Hide Edit Form" : "Show Edit Form"}
-        </button>
-        {showEditForm && (
-          <EmployeeFormEdit employee={employee} onEditEmployee={setEmployee} />
-        )}
       </div>
-    </>
+    </div>
   );
 }
 

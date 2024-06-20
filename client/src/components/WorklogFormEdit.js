@@ -58,12 +58,6 @@ function WorklogFormEdit({ worklog, onEditWorklog }) {
     <div>
       <h3>Update Worklog Information</h3>
       <form onSubmit={handleSubmit} className="form">
-        <input
-          type="text"
-          value={employee}
-          onChange={(e) => setEmployee(e.target.value)}
-          placeholder="Employee"
-        />
         <select
           value={project || ""}
           onChange={(e) => setProject(e.target.value)}

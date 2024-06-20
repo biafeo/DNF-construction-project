@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import EmployeeForm from "./EmployeeForm";
 import { EmployeeContext } from "./EmployeeContext";
@@ -10,6 +10,11 @@ function EmployeesList() {
   useEffect(() => {
     getEmployees();
   }, []);
+  const [isFormVisible, setFormVisible] = useState(false);
+
+  const toggleForm = () => {
+    setFormVisible(!isFormVisible);
+  };
 
   return (
     <>
@@ -17,9 +22,9 @@ function EmployeesList() {
         <div className="employees-list">
           {employees.map((employee) => (
             <div key={employee.id} className="employees-card">
-              <h1>{employee.name}</h1>
+              <h3 className="styled-h32">{employee.name}</h3>
               <div className="button-container">
-                <Link to={`/employees/${employee.id}`} className="button">
+                <Link to={`/employees/${employee.id}`}>
                   <button className="button">View Employee Details</button>
                 </Link>
                 <button
@@ -32,8 +37,10 @@ function EmployeesList() {
             </div>
           ))}
         </div>
-
-        <EmployeeForm onAddEmployee={handleAddEmployee} />
+        <button onClick={toggleForm} className="toggle-button">
+          {isFormVisible ? "Cancel" : "Add Employee"}
+        </button>
+        {isFormVisible && <EmployeeForm onAddEmployee={handleAddEmployee} />}
       </div>
     </>
   );

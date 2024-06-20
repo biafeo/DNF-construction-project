@@ -64,8 +64,7 @@ function ExpenseFormEdit({ expense, onEditExpense }) {
 
   return (
     <div>
-      <h3>Update Expense Information</h3>
-      <form onSubmit={handleSubmit} className="form">
+      <form onSubmit={handleSubmit} className="form-geral">
         <input
           type="number"
           value={amount}

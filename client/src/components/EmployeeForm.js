@@ -11,9 +11,24 @@ function EmployeeForm() {
   const [hourly_rate, setHourlyRate] = useState("");
   const [phone_number, setPhoneNumber] = useState("");
   const [isBoss, setIsBoss] = useState("");
+  const [error, setError] = useState("");
 
   function handleSubmit(e) {
     e.preventDefault();
+
+    if (
+      !name ||
+      !email ||
+      !address ||
+      !_password_hash ||
+      !hourly_rate ||
+      !phone_number ||
+      !isBoss
+    ) {
+      setError("All fields are required");
+      return;
+    }
+
     const newEmployee = {
       name,
       email,
@@ -35,7 +50,7 @@ function EmployeeForm() {
         if (r.ok) {
           return r.json();
         }
-        throw new Error("Failed to add");
+        throw new Error("Failed to add employee.");
       })
       .then((newEmployee) => {
         handleAddEmployee(newEmployee);
@@ -46,11 +61,14 @@ function EmployeeForm() {
         setHourlyRate("");
         setPhoneNumber("");
         setIsBoss("");
-      });
+        setError("");
+      })
+      .catch((err) => setError(err.message));
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="form-geral" onSubmit={handleSubmit}>
+      {error && <p className="error-message">{error}</p>}
       <input
         type="text"
         value={name}
@@ -92,8 +110,9 @@ function EmployeeForm() {
         onChange={(e) => setPhoneNumber(e.target.value)}
         placeholder="Phone Number"
       />
+      <br />
       <select value={isBoss} onChange={(e) => setIsBoss(e.target.value)}>
-        <option value="">is admin?</option>
+        <option value="">Is admin?</option>
         <option value="true">Yes</option>
         <option value="false">No</option>
       </select>

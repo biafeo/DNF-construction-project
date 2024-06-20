@@ -38,7 +38,7 @@ function ProjectForm({ onAddProject }) {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="form-geral" onSubmit={handleSubmit}>
       <input
         type="text"
         value={name}

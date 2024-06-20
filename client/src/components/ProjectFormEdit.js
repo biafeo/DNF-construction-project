@@ -50,8 +50,7 @@ function ProjectFormEdit({ project, onEditProject }) {
 
   return (
     <div>
-      <h3>Update {name}'s Information</h3>
-      <form onSubmit={handleSubmit} className="form">
+      <form onSubmit={handleSubmit} className="form-geral">
         <input
           type="text"
           value={name}

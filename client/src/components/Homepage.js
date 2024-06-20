@@ -1,19 +1,45 @@
 import React, { useState } from "react";
 import "../homepage.css";
 import homepage from "./homepage.jpg";
-import image0 from "./image0.png";
-import image1 from "./image1.png";
-import image2 from "./image2.png";
-import image3 from "./image3.png";
-import contact1 from "./contact1.jpeg";
-import contact2 from "./contact2.jpeg";
-import contact3 from "./contact3.jpeg";
 
 function Homepage() {
   const [isFormVisible, setFormVisible] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
 
   const toggleForm = () => {
     setFormVisible(!isFormVisible);
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    fetch("http://localhost:5555/send-email", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    })
+      .then((response) => {
+        if (response.ok) {
+          alert("Email sent successfully!");
+          setFormVisible(false);
+          setFormData({ name: "", email: "", message: "" });
+        } else {
+          alert("Failed to send email. Please try again later.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error sending email:", error);
+      });
   };
 
   return (
@@ -23,7 +49,7 @@ function Homepage() {
           <div className="welcome">
             <div className="welcome-text">
               <h2>Professional Construction Services</h2>
-              <p>
+              <div>
                 <div className="centered-block1">Residential Construction</div>
                 <div className="centered-block">
                   Custom homes, renovations, and additions.
@@ -40,7 +66,7 @@ function Homepage() {
                 <div className="centered-block">
                   Construction consulting and planning.
                 </div>
-              </p>
+              </div>
             </div>
           </div>
         </section>
@@ -52,13 +78,13 @@ function Homepage() {
             <div className="why-card">
               <strong>Experienced Team</strong>
               <br />
-              <img src={image0} alt="Experienced Team" />
+              <img src="image0.png" alt="Experienced Team" />
               <p>Skilled professionals with years of industry experience.</p>
             </div>
             <div className="why-card">
               <strong>Quality Assurance</strong>
               <br />
-              <img src={image1} alt="Quality Assurance" />
+              <img src="image1.png" alt="Quality Assurance" />
               <p>
                 Commitment to high standards and meticulous attention to detail.
               </p>
@@ -66,7 +92,7 @@ function Homepage() {
             <div className="why-card">
               <strong>Timely Completion</strong>
               <br />
-              <img src={image2} alt="Timely completion" />
+              <img src="image2.png" alt="Timely completion" />
               <p>
                 Proven track record of completing projects on time and within
                 budget.
@@ -75,7 +101,7 @@ function Homepage() {
             <div className="why-card">
               <strong>Customer Focused</strong>
               <br />
-              <img src={image3} alt="Customer Focused" />
+              <img src="image3.png" alt="Customer Focused" />
               <p>
                 Personalized services tailored to meet individual client needs.
               </p>
@@ -89,15 +115,15 @@ function Homepage() {
       <div className="contact-form-container">
         <div className="contact-container">
           <div className="contact">
-            <img src={contact1} alt="Phone icon" />
+            <img src="contact1.jpeg" alt="Phone icon" />
             <p>Phone: (123) 456-7890</p>
           </div>
           <div className="contact">
-            <img src={contact2} alt="Email icon" />
+            <img src="contact2.jpeg" alt="Email icon" />
             <p>Email: info@constructioncompany.com</p>
           </div>
           <div className="contact">
-            <img src={contact3} alt="Address icon" />
+            <img src="contact3.jpeg" alt="Address icon" />
             <p>Address: 123 Main St, Anytown, USA</p>
           </div>
         </div>
@@ -106,19 +132,48 @@ function Homepage() {
             Contact Us Today
           </button>
           {isFormVisible && (
-            <form className="contact-form">
+            <form className="contact-form" onSubmit={handleSubmit}>
               <label>
-                <input type="text" placeholder="Name" required />
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                />
               </label>
               <label>
-                <input type="email" placeholder="Email" required />
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                />
               </label>
               <label>
-                <textarea placeholder="Message" required />
+                <textarea
+                  name="message"
+                  placeholder="Message"
+                  value={formData.message}
+                  onChange={handleChange}
+                  required
+                />
               </label>
-              <button type="submit" className="contact-submit-button">
-                Submit
-              </button>
+              <div className="button-container">
+                <button type="submit" className="contact-submit-button">
+                  Submit
+                </button>
+                <button
+                  type="button"
+                  className="contact-submit-button"
+                  onClick={toggleForm}
+                >
+                  Cancel
+                </button>
+              </div>
             </form>
           )}
         </div>

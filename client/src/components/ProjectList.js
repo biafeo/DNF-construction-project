@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import ProjectForm from "./ProjectForm";
 import ProjectFormEdit from "./ProjectFormEdit";
 import SeeMoreProject from "./SeeMoreProject";
-import BossNavBar from "./BossNavBar";
 
 function ProjectList() {
   const [projects, setProjects] = useState([]);
@@ -24,49 +23,42 @@ function ProjectList() {
     setProjects([...projects, newProject]);
   };
 
-  const handleEditProject = (updatedProject) => {
-    setProjects(
-      projects.map((project) =>
-        project.id === updatedProject.id ? updatedProject : project
-      )
-    );
-    setEditProject(null);
-  };
-
   const handleDeleteProject = (projectId) => {
     setProjects(projects.filter((project) => project.id !== projectId));
     fetch(`/projects/${projectId}`, { method: "DELETE" }).then(() => {});
   };
+  const [isFormVisible, setFormVisible] = useState(false);
 
+  const toggleForm = () => {
+    setFormVisible(!isFormVisible);
+  };
   return (
     <>
-      <BossNavBar />
       <div className="project-container">
-        <h1>My Projects</h1>
         <div className="projects-list">
           {projects.map((project) => (
-            <div key={project.id} className="project-card">
-              <h3>{project.name}</h3>
+            <div key={project.id} className="employees-card">
+              <h3 className="styled-h32">{project.name}</h3>
               <div className="button-container">
-                <Link to={`/projects/${project.id}`} className="button-link">
-                  <button>View Project Details</button>
+                <Link to={`/projects/${project.id}`}>
+                  <button className="button">View Details</button>
                 </Link>
-                <button onClick={() => setEditProject(project)}>Edit</button>
-                <button onClick={() => handleDeleteProject(project.id)}>
+
+                <button
+                  className="button"
+                  onClick={() => handleDeleteProject(project.id)}
+                >
                   Delete
                 </button>
               </div>
             </div>
           ))}
         </div>
-        {editProject && (
-          <ProjectFormEdit
-            onEditProject={handleEditProject}
-            project={editProject}
-          />
-        )}
-        <h3>Add Project:</h3>
-        <ProjectForm onAddProject={handleAddProject} />
+
+        <button onClick={toggleForm} className="toggle-button">
+          {isFormVisible ? "Cancel" : "Add Project"}
+        </button>
+        {isFormVisible && <ProjectForm onAddProject={handleAddProject} />}
       </div>
     </>
   );
