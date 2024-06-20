@@ -1,17 +1,15 @@
-from config import app, db, api, os
+from config import app, db, api, api_bp, mail, os
 from flask_restful import Resource
-from flask import Flask, make_response, jsonify, request, session, render_template
+from flask import make_response, jsonify, request, session, render_template
 from models import Employee, WorkLog, Expense, Project
-from flask_cors import CORS
-from flask_migrate import Migrate
 from datetime import datetime
-from flask_mail import Mail, Message
+from flask_mail import Message
 import smtplib
-mail = Mail(app)
 
 
 
-@app.route('/')
+
+@api_bp.route('/')
 def index():
     return render_template("index.html")
 
@@ -55,7 +53,7 @@ class Employees(Resource):
 api.add_resource(Employees, '/employees')
 
 
-@app.route('/sign_in', methods=['POST'])
+@api_bp.route('/sign_in', methods=['POST'])
 def sign_in():
     user_data = request.get_json()
     user = Employee.query.filter_by(email=user_data.get("email")).first()
@@ -66,12 +64,12 @@ def sign_in():
     session["employee_id"] = user.id
     return make_response(jsonify(user.to_dict()), 200)
 
-@app.route('/sign_out', methods= ["DELETE"])
+@api_bp.route('/sign_out', methods= ["DELETE"])
 def sign_out():
     del session["employee_id"]
     return{}, 204
 
-@app.route("/me")
+@api_bp.route("/me")
 def me():
     user = db.session.get(Employee, session.get("employee_id"))
     if not user:
@@ -79,7 +77,7 @@ def me():
     return make_response(jsonify(user.to_dict()), 200)
 
 
-@app.route('/send-email', methods=['POST'])
+@api_bp.route('/send-email', methods=['POST'])
 def send_email():
     data = request.get_json()
     name = data.get('name')

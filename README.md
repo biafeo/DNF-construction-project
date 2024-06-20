@@ -299,7 +299,7 @@ You can also set this up resource-by-resource by importing and using the
 `@cross_origin` decorator:
 
 ```py
-@app.route("/")
+@api_bp.route("/")
 @cross_origin()
 def howdy():
   return "Howdy partner!"

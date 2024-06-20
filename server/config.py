@@ -10,7 +10,7 @@ from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
 from flask_bcrypt import Bcrypt
-from flask_mail import Mail, Message
+from flask_mail import Mail
 load_dotenv('.env')
 
 DATABASE_URI = os.getenv('DATABASE_URI')
@@ -24,6 +24,8 @@ app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.json.compact = False
 app.secret_key = environ.get("SESSION_SECRET")
+
+
 
 
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
