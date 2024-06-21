@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import ProjectForm from "./ProjectForm";
-import ProjectFormEdit from "./ProjectFormEdit";
-import SeeMoreProject from "./SeeMoreProject";
 
 function ProjectList() {
   const [projects, setProjects] = useState([]);
-  const [editProject, setEditProject] = useState(null);
 
   useEffect(() => {
     fetch("/api/projects")

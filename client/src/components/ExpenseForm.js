@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-function ExpenseForm({ onAddExpense, onExpenseSuccess }) {
+function ExpenseForm({ onAddExpense}) {
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
   const [projects, setProjects] = useState([]);

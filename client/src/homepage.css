@@ -212,7 +212,7 @@ body {
   background-color: #fff;
   max-width: 300px;
   width: 100%;
-  margin-top: 20px; /* Add margin to separate from contact container */
+  margin-top: 20px;
 }
 
 .contact-submit-button,
@@ -259,7 +259,7 @@ body {
   margin-right: 10px;
 }
 
-/* Responsive styles for Contact Form */
+
 @media (max-width: 768px) {
   .contact-form-container {
     flex-direction: column;
