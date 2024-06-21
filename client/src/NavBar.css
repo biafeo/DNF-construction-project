@@ -54,6 +54,11 @@ body {
   padding: 10px;
   transition: color 0.3s;
 }
+.nav-links-container {
+  display: flex;
+  gap: 1rem;
+  flex-grow: 1;
+}
 
 .nav-links-container .nav-link.button:hover {
   color: rgba(220, 164, 60, 1);
@@ -81,7 +86,7 @@ body {
     position: absolute;
     top: 60px;
     left: 0;
-    background-color: #333;
+    background-color: rgba(32, 33, 43, 1);
     padding: 1rem;
   }
 
