@@ -73,7 +73,7 @@ class WorkLog(db.Model):
             'project_id': self.project_id,
             'project_name': self.project.name if self.project else None, 
             'hours_worked': self.hours_worked,
-            'date': self.date,
+            'date': self.date.strftime('%Y-%m-%d'),
             'paid': self.paid if hasattr(self, 'paid') else None
         }
 

@@ -9,7 +9,11 @@ function WorklogList() {
     fetch("/api/worklogs")
       .then((r) => r.json())
       .then((data) => {
-        setWorklogs(data);
+        const formattedData = data.map((worklog) => ({
+          ...worklog,
+          date: formatDate(worklog.date),
+        }));
+        setWorklogs(formattedData);
       });
   }, []);
 
@@ -49,6 +53,11 @@ function WorklogList() {
         console.error("Error updating paid status:", error);
       });
   };
+
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toISOString().slice(0, 10);
+  }
 
   return (
     <>

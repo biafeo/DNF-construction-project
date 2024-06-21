@@ -2,17 +2,16 @@ import { useState, useEffect } from "react";
 
 function formatDate(dateString) {
   const date = new Date(dateString);
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
+  const year = date.getUTCFullYear();
+  const month = String(date.getUTCMonth() + 1).padStart(2, "0");
+  const day = String(date.getUTCDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
 }
-
 function WorklogFormEdit({ worklog, onEditWorklog }) {
   const [employee, setEmployee] = useState(worklog.employee_id || "");
   const [project, setProject] = useState(worklog.project_id || "");
   const [hours_worked, setHoursWorked] = useState(worklog.hours_worked || "");
-  const [date, setDate] = useState(formatDate(worklog.date) || "");
+  const [date, setDate] = useState(formatDate(worklog.date));
   const [projects, setProjects] = useState([]);
 
   useEffect(() => {
