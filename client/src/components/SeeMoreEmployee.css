@@ -1,17 +1,28 @@
+/* General Styles */
 .employee-page-container {
   display: flex;
-  flex-direction: column;
+  flex-direction: row; /* Default to row on larger screens */
   padding: 20px;
+  gap: 20px; /* Add some gap between the sections */
+  flex-wrap: wrap; /* Ensure content wraps if it overflows */
+  box-sizing: border-box;
+  max-width: 100%;
+  overflow: hidden;
 }
+
 .profile-container {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
+
 .worklogs-container {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  flex-grow: 1;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .employee-info {
@@ -19,7 +30,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 100px 10px;
+  margin: 20px 10px;
   padding: 20px;
   box-sizing: border-box;
   border: 1px solid #ddd;
@@ -30,6 +41,7 @@
   max-width: 300px;
   width: 100%;
 }
+
 .form-profile {
   display: flex;
   flex-direction: column;
@@ -46,6 +58,7 @@
   width: 100%;
   margin-top: -70px;
 }
+
 .form-profile input,
 .form-profile select,
 .form-profile button,
@@ -73,6 +86,7 @@
   color: rgba(220, 164, 60, 1);
   border-bottom: 2px solid rgba(220, 164, 60, 1);
 }
+
 .profile-card {
   display: flex;
   align-items: center;
@@ -97,7 +111,6 @@
   cursor: pointer;
   padding: 10px;
   transition: color 0.3s;
-
   width: 100%;
   max-width: 200px;
 }
@@ -125,15 +138,19 @@
   border-bottom: 2px solid rgba(220, 164, 60, 1);
 }
 
+.worklog1 {
+  max-width: 100%;
+  overflow-x: auto; /* Ensure table can be scrolled horizontally */
+}
+
 .worklog1 table {
   font-family: "League Spartan", sans-serif;
   width: 100%;
   border-collapse: collapse;
-  margin-top: 80px;
-  max-width: 700px;
-  margin-left: -3%;
+  margin-top: 20px;
   border-radius: 8px;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 .worklog1 th,
@@ -192,4 +209,59 @@
   margin-top: 5px;
   margin-bottom: 10px;
   box-sizing: border-box;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .employee-page-container {
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .employee-info,
+  .worklogs-container {
+    margin: 0;
+    max-width: 100%;
+  }
+
+  .worklogs-container {
+    margin-top: 20px;
+  }
+
+  .worklog1 table {
+    margin-top: 20px;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  .form-hours-container {
+    justify-content: center;
+    padding: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .employee-page-container {
+    padding: 5px;
+  }
+
+  .employee-info,
+  .worklogs-container {
+    margin: 0;
+    max-width: 100%;
+  }
+
+  .form-profile,
+  .form-hours {
+    padding: 5px;
+  }
+
+  .worklog1 table {
+    margin-top: 10px;
+    overflow-x: auto;
+  }
+
+  .worklogs-container {
+    margin-top: 10px;
+  }
 }

@@ -1,8 +1,21 @@
+html,
 body {
-  font-family: "League Spartan", sans-serif;
-  background-color: white;
   margin: 0;
   padding: 0;
+  width: 100%;
+  height: 100%;
+  font-family: "League Spartan", sans-serif;
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+body {
+  background-color: white;
 }
 
 .welcome-text h2,
@@ -171,20 +184,23 @@ body {
   max-width: 5%;
   height: auto;
 }
+
 .contact-container {
   flex: 1;
   margin-top: 20px;
 }
+
 .contact p {
   margin: 25px;
 }
 
 .contact-form-container {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: flex-start;
   margin-top: 20px;
   padding: 20px;
+  flex-wrap: wrap;
 }
 
 .contact-form {
@@ -196,7 +212,7 @@ body {
   background-color: #fff;
   max-width: 300px;
   width: 100%;
-  margin-top: 20px;
+  margin-top: 20px; /* Add margin to separate from contact container */
 }
 
 .contact-submit-button,
@@ -241,4 +257,47 @@ body {
 
 .contact img {
   margin-right: 10px;
+}
+
+/* Responsive styles for Contact Form */
+@media (max-width: 768px) {
+  .contact-form-container {
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .contact-form {
+    max-width: 100%;
+    padding: 15px;
+  }
+
+  .contact-submit-button,
+  .contact-us-button {
+    font-size: 14px;
+    padding: 8px;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact p {
+    margin: 10px 0;
+    font-size: 14px;
+  }
+
+  .contact-form-container {
+    padding: 5px;
+  }
+
+  .contact-form {
+    max-width: 100%;
+    padding: 10px;
+  }
+
+  .contact-submit-button,
+  .contact-us-button {
+    font-size: 12px;
+    padding: 6px;
+    max-width: 100%;
+  }
 }

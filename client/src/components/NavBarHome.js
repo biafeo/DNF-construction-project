@@ -10,23 +10,51 @@ function NavBarHome() {
     setIsOpen(!isOpen);
   };
 
+  const handleNavItemClick = () => {
+    setIsOpen(false);
+  };
+
   return (
     <nav className="navbar">
       <img src="../logoDNF.png" alt="Company Logo" className="nav-logo" />
       <div className={`nav-links-container ${isOpen ? "open" : ""}`}>
-        <NavLink exact to="/" activeClassName="active">
+        <NavLink
+          exact
+          to="/"
+          activeClassName="active"
+          onClick={handleNavItemClick}
+        >
           <button className="nav-link-button">Home</button>
         </NavLink>
-        <Link to="about-us" smooth={true} duration={500}>
+        <Link
+          to="about-us"
+          smooth={true}
+          duration={500}
+          onClick={handleNavItemClick}
+        >
           <button className="nav-link-button">About Us</button>
         </Link>
-        <Link to="why-us" smooth={true} duration={500}>
+        <Link
+          to="why-us"
+          smooth={true}
+          duration={500}
+          onClick={handleNavItemClick}
+        >
           <button className="nav-link-button">Why Us?</button>
         </Link>
-        <Link to="contact" smooth={true} duration={500}>
+        <Link
+          to="contact"
+          smooth={true}
+          duration={500}
+          onClick={handleNavItemClick}
+        >
           <button className="nav-link-button">Contact</button>
         </Link>
-        <NavLink to="/sign_in" activeClassName="active">
+        <NavLink
+          to="/sign_in"
+          activeClassName="active"
+          onClick={handleNavItemClick}
+        >
           <button className="nav-link-button">Login</button>
         </NavLink>
       </div>

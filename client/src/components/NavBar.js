@@ -10,6 +10,10 @@ function NavBar({ logout, user }) {
     setIsOpen(!isOpen);
   };
 
+  const handleNavItemClick = () => {
+    setIsOpen(false);
+  };
+
   return (
     <nav className="navbar">
       <img src="../logoDNF.png" alt="Company Logo" className="nav-logo" />
@@ -19,13 +23,19 @@ function NavBar({ logout, user }) {
           exact
           className="nav-link"
           activeClassName="active"
+          onClick={handleNavItemClick}
         >
           <button className="nav-link button">Home</button>
         </NavLink>
-        <NavLink to={`/employee/${user.id}`} className="nav-link">
+        <NavLink
+          to={`/employee/${user.id}`}
+          className="nav-link"
+          activeClassName="active"
+          onClick={handleNavItemClick}
+        >
           <button className="nav-link button">My Profile</button>
         </NavLink>
-        <Logout logout={logout} />
+        <Logout logout={logout} onClick={handleNavItemClick} />
       </div>
       <div className="hamburger-menu" onClick={toggleMenu}>
         <div className="bar"></div>
