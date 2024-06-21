@@ -46,7 +46,7 @@ function ExpensesList() {
         <div className="expenses-list">
           {expenses.map((expense) => (
             <div key={expense.id} className="expense-card">
-              <h3>{expense.description}</h3>
+              <h3 className="h3-expense">{expense.description}</h3>
               <div className="button-container">
                 <Link to={`/expenses/${expense.id}`} className="button-link">
                   <button className="button">View Expense Details</button>

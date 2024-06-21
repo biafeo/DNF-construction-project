@@ -64,15 +64,30 @@ function WorklogList() {
       <div className="worklog-container">
         <div className="worklogs-list">
           {worklogs.map((worklog) => (
-            <div key={worklog.id} className="worklog-card">
-              <h3>{worklog.employee_name}</h3>
-              <h3>{worklog.project_name}</h3>
-              <h3>{worklog.hours_worked}hrs</h3>
-              <h3>{worklog.date}</h3>
-              <h3>Paid: {worklog.paid ? "Yes" : "No"}</h3>
-              <div className="button-container">
+            <div key={worklog.id} className="worklogs-info">
+              <div className="worklog-icon">
+                <img src="/worklog2.jpeg" alt="Address icon" />
+                <h3 className="h3-expense">{worklog.employee_name}</h3>
+              </div>
+              <div className="worklog-icon">
+                <img src="/worklog3.jpeg" alt="Address icon" />
+                <h3>{worklog.project_name}</h3>
+              </div>
+              <div className="worklog-icon">
+                <img src="/worklog4.jpeg" alt="Address icon" />
+                <h3>{worklog.hours_worked}hrs</h3>
+              </div>
+              <div className="worklog-icon">
+                <img src="/worklog5.jpeg" alt="Address icon" />
+                <h3>{worklog.date}</h3>
+              </div>
+              <div className="worklog-icon">
+                <img src="/worklog1.jpeg" alt="Address icon" />
+                <h3>Paid: {worklog.paid ? "Yes" : "No"}</h3>
+              </div>
+              <div className="worklogs-button-container">
                 <button
-                  className="button"
+                  className="worklogs-button"
                   onClick={() =>
                     setEditWorklogId(
                       editWorklogId === worklog.id ? null : worklog.id
@@ -81,25 +96,27 @@ function WorklogList() {
                 >
                   {editWorklogId === worklog.id ? "Cancel" : "Edit"}
                 </button>
-                {editWorklogId === worklog.id && (
-                  <WorklogFormEdit
-                    onEditWorklog={handleEditWorklog}
-                    worklog={worklog}
-                  />
-                )}
                 <button
-                  className="button"
+                  className="worklogs-button"
                   onClick={() => handleDeleteWorklog(worklog.id)}
                 >
                   Delete
                 </button>
                 <button
-                  className="button"
+                  className="worklogs-button"
                   onClick={() => handleTogglePaidStatus(worklog)}
                 >
-                  {worklog.paid ? "Unmark as Paid" : "Mark as Paid"}
+                  {worklog.paid ? "Paid" : "Not Paid"}
                 </button>
               </div>
+              {editWorklogId === worklog.id && (
+                <div className="worklog-edit-form">
+                  <WorklogFormEdit
+                    onEditWorklog={handleEditWorklog}
+                    worklog={worklog}
+                  />
+                </div>
+              )}
             </div>
           ))}
         </div>

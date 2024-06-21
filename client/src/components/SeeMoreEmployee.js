@@ -234,90 +234,94 @@ function SeeMoreEmployee() {
           </div>
         </div>
       </div>
-      <div className="worklogs">
-        <table>
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Project</th>
-              <th>Hours Worked</th>
-              <th>Payment</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {workLogsWithPayments.map((log) => (
-              <tr key={log.id}>
-                <td>{log.date}</td>
-                <td>{log.project_name}</td>
-                <td>{log.hours_worked}</td>
-                <td>${log.payment.toFixed(2)}</td>
-                {!log.paid && (
-                  <td>
-                    <button
-                      onClick={() => handleTogglePaidStatus(log.id, log.paid)}
-                      className="paid-button"
-                    >
-                      Mark as Paid
-                    </button>
-                  </td>
-                )}
+      <div className="worklogs-container">
+        <div className="worklog1">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Project</th>
+                <th>Hours Worked</th>
+                <th>Payment</th>
+                <th></th>
               </tr>
-            ))}
-            <tr>
-              <td colSpan="2">
-                <strong>Total</strong>
-              </td>
-              <td>
-                <strong>{totalHours}</strong>
-              </td>
-              <td>
-                <strong>${totalPayment.toFixed(2)}</strong>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <form className="form-hours" onSubmit={handleAddHours}>
-          <label>
-            Worked from:
-            <input
-              type="time"
-              value={startTime}
-              onChange={(e) => setStartTime(e.target.value)}
-              required
-            />
-          </label>
-          <br />
-          <label>
-            Until:
-            <input
-              type="time"
-              value={endTime}
-              onChange={(e) => setEndTime(e.target.value)}
-              required
-            />
-          </label>
-          <br />
-          <label>
-            Project:
-            <select
-              value={selectedProjectName}
-              onChange={(e) => setSelectedProjectName(e.target.value)}
-              required
-            >
-              <option value="">Select a project</option>
-              {projects.map((project) => (
-                <option key={project.id} value={project.name}>
-                  {project.name}
-                </option>
+            </thead>
+            <tbody>
+              {workLogsWithPayments.map((log) => (
+                <tr key={log.id}>
+                  <td>{log.date}</td>
+                  <td>{log.project_name}</td>
+                  <td>{log.hours_worked}</td>
+                  <td>${log.payment.toFixed(2)}</td>
+                  {!log.paid && (
+                    <td>
+                      <button
+                        onClick={() => handleTogglePaidStatus(log.id, log.paid)}
+                        className="paid-button"
+                      >
+                        Mark as Paid
+                      </button>
+                    </td>
+                  )}
+                </tr>
               ))}
-            </select>
-          </label>
-          <br />
-          <button type="submit" className="add-hours-button">
-            Add Hours
-          </button>
-        </form>
+              <tr>
+                <td colSpan="2">
+                  <strong>Total</strong>
+                </td>
+                <td>
+                  <strong>{totalHours}</strong>
+                </td>
+                <td>
+                  <strong>${totalPayment.toFixed(2)}</strong>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div className="form-hours-container">
+          <form className="form-hours" onSubmit={handleAddHours}>
+            <label>
+              Worked from:
+              <input
+                type="time"
+                value={startTime}
+                onChange={(e) => setStartTime(e.target.value)}
+                required
+              />
+            </label>
+            <br />
+            <label>
+              Until:
+              <input
+                type="time"
+                value={endTime}
+                onChange={(e) => setEndTime(e.target.value)}
+                required
+              />
+            </label>
+            <br />
+            <label>
+              Project:
+              <select
+                value={selectedProjectName}
+                onChange={(e) => setSelectedProjectName(e.target.value)}
+                required
+              >
+                <option value="">Select a project</option>
+                {projects.map((project) => (
+                  <option key={project.id} value={project.name}>
+                    {project.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <br />
+            <button type="submit" className="add-hours-button">
+              Add Hours
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );

@@ -8,8 +8,10 @@
   flex-direction: column;
   gap: 20px;
 }
-.worklogs {
-  flex: 1;
+.worklogs-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .employee-info {
@@ -123,40 +125,40 @@
   border-bottom: 2px solid rgba(220, 164, 60, 1);
 }
 
-.worklogs-container {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.worklogs {
-  flex: 1;
-  background-color: #fff;
-
-  padding: 20px;
-  overflow-x: auto;
-}
-
-.worklogs table {
+.worklog1 table {
+  font-family: "League Spartan", sans-serif;
   width: 100%;
   border-collapse: collapse;
+  margin-top: 80px;
+  max-width: 700px;
+  margin-left: -3%;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
-.worklogs th,
-.worklogs td {
+.worklog1 th,
+.worklog1 td {
   border: 1px solid #ddd;
   padding: 8px;
   text-align: left;
 }
 
-.worklogs th {
-  background-color: rgba(220, 164, 60, 1);
-  color: black;
+.worklog1 th {
+  background-color: rgba(32, 33, 43, 1);
+  color: white;
 }
 
-.worklogs td {
+.worklog1 td {
   background-color: #fff;
   color: black;
+  border-radius: 8px;
+}
+
+.form-hours-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  width: 100%;
 }
 
 .form-hours {
@@ -190,10 +192,4 @@
   margin-top: 5px;
   margin-bottom: 10px;
   box-sizing: border-box;
-}
-.form-hours-container {
-  display: flex;
-  justify-content: flex-end;
-  align-items: flex-start;
-  width: 100%;
 }

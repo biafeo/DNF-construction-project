@@ -67,8 +67,7 @@ function WorklogFormEdit({ worklog, onEditWorklog }) {
 
   return (
     <div>
-      <h3>Update Worklog Information</h3>
-      <form onSubmit={handleSubmit} className="form">
+      <form onSubmit={handleSubmit} className="form-worklog">
         <select value={project} onChange={(e) => setProject(e.target.value)}>
           <option value="">Select a project</option>
           {projects.map((project) => (

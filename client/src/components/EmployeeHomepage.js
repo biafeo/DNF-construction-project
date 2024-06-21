@@ -1,12 +1,48 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import "../homepage.css";
 import homepage from "./homepage.jpg";
+import emailjs from "@emailjs/browser";
 
 function EmployeeHomepage() {
   const [isFormVisible, setFormVisible] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+
+  const form = useRef();
 
   const toggleForm = () => {
     setFormVisible(!isFormVisible);
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const sendEmail = (e) => {
+    e.preventDefault();
+
+    emailjs
+      .sendForm(
+        "service_v5fm5bu",
+        "template_7a3g274",
+        form.current,
+        "sseUuLsOivXC0pt0T"
+      )
+      .then(
+        () => {
+          alert("Email sent successfully!");
+          setFormVisible(false);
+          setFormData({ name: "", email: "", message: "" });
+        },
+        (error) => {
+          console.log("FAILED...", error.text);
+          alert("Failed to send email. Please try again later.");
+        }
+      );
   };
 
   return (
@@ -89,15 +125,15 @@ function EmployeeHomepage() {
         <div className="contact-container">
           <div className="contact">
             <img src="/contact1.jpeg" alt="Phone icon" />
-            <p>Phone: (123) 456-7890</p>
+            <p>(202) 710-4445</p>
           </div>
           <div className="contact">
             <img src="/contact3.jpeg" alt="Email icon" />
-            <p>Email: info@constructioncompany.com</p>
+            <p>dnfconstructionproject@gmail.com</p>
           </div>
           <div className="contact">
             <img src="/contact2.jpeg" alt="Address icon" />
-            <p>Address: 123 Main St, Anytown, USA</p>
+            <p>201 N Ripley St, Alexandria VA USA</p>
           </div>
         </div>
         <div>
@@ -105,38 +141,32 @@ function EmployeeHomepage() {
             Contact Us Today
           </button>
           {isFormVisible && (
-            <form className="contact-form">
-              <label>
-                <input
-                  type="text"
-                  placeholder="Name"
-                  defaultValue=""
-                  required
-                />
-              </label>
-              <label>
-                <input
-                  type="email"
-                  placeholder="Email"
-                  defaultValue=""
-                  required
-                />
-              </label>
-              <label>
-                <textarea placeholder="Message" defaultValue="" required />
-              </label>
-              <div className="button-container">
-                <button type="submit" className="contact-submit-button">
-                  Submit
-                </button>
-                <button
-                  type="button"
-                  className="contact-submit-button"
-                  onClick={toggleForm}
-                >
-                  Cancel
-                </button>
-              </div>
+            <form className="contact-form" ref={form} onSubmit={sendEmail}>
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                placeholder="Name"
+              />
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="Email"
+              />
+              <textarea
+                name="message"
+                value={formData.message}
+                onChange={handleChange}
+                placeholder="Message"
+              />
+              <input
+                className="contact-submit-button"
+                type="submit"
+                value="Send"
+              />
             </form>
           )}
         </div>

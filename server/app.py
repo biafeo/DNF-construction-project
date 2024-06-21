@@ -1,10 +1,9 @@
-from config import app, db, api, api_bp, mail, os
+from config import app, db, api, api_bp, os
 from flask_restful import Resource
 from flask import make_response, jsonify, request, session, render_template
 from models import Employee, WorkLog, Expense, Project
 from datetime import datetime
-from flask_mail import Message
-import smtplib
+
 
 @api_bp.route('/')
 def index():
@@ -71,26 +70,7 @@ def me():
         return {}, 401
     return make_response(jsonify(user.to_dict()), 200)
 
-@api_bp.route('/send-email', methods=['POST'])
-def send_email():
-    data = request.get_json()
-    name = data.get('name')
-    email = data.get('email')
-    message_body = data.get('message')
 
-    msg = Message(subject=f"New message from {name}",
-                  recipients=[os.getenv('MAIL_RECIPIENT')],
-                  body=message_body,
-                  sender=email)
-    try:
-        mail.send(msg)
-        return {"message": "Email sent successfully"}, 200
-    except smtplib.SMTPException as e:
-        print(f"SMTP error: {str(e)}")
-        return {"message": f"Failed to send email: {str(e)}"}, 500
-    except Exception as e:
-        print(f"Failed to send email: {str(e)}")
-        return {"message": f"Failed to send email: {str(e)}"}, 500
 
 class EmployeesById(Resource):
     def get(self, id):

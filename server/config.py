@@ -7,7 +7,6 @@ from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
 from flask_bcrypt import Bcrypt
-from flask_mail import Mail
 
 load_dotenv('.env')
 
@@ -24,15 +23,6 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.json.compact = False
 app.secret_key = environ.get("SESSION_SECRET")
 
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USE_SSL'] = False
-app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
-app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
-app.config['MAIL_DEFAULT_SENDER'] = os.getenv('MAIL_DEFAULT_SENDER')
-
-mail = Mail(app)
 flask_bcrypt = Bcrypt(app)
 metadata = MetaData(naming_convention={
     "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
