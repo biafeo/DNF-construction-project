@@ -12,7 +12,7 @@ function SeeMoreExpenses() {
   };
 
   useEffect(() => {
-    fetch(`/expenses/${id}`)
+    fetch(`/api/expenses/${id}`)
       .then((r) => r.json())
       .then((data) => {
         setExpense(data);

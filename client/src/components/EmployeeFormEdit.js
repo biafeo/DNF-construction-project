@@ -1,37 +1,33 @@
 import { useState, useEffect } from "react";
 
 function EmployeeFormEdit({ employee, onEditEmployee }) {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [address, setAddress] = useState("");
+  const [name, setName] = useState(employee.name || "");
+  const [email, setEmail] = useState(employee.email || "");
+  const [address, setAddress] = useState(employee.address || "");
   const [password, setPassword] = useState("");
-  const [hourly_rate, setHourlyRate] = useState("");
-  const [phone_number, setPhoneNumber] = useState("");
-
+  const [hourly_rate, setHourlyRate] = useState(employee.hourly_rate || "");
+  const [phone_number, setPhoneNumber] = useState(employee.phone_number || "");
   useEffect(() => {
     if (employee) {
-      setName(employee.name);
-      setEmail(employee.email);
-      setAddress(employee.address);
-      setPassword(employee.password);
-      setHourlyRate(employee.hourly_rate);
-      setPhoneNumber(employee.phone_number);
+      setName(employee.name || "");
+      setEmail(employee.email || "");
+      setAddress(employee.address || "");
+      setHourlyRate(employee.hourly_rate || "");
+      setPhoneNumber(employee.phone_number || "");
     }
   }, [employee]);
 
   function handleSubmit(e) {
     e.preventDefault();
-    const updatedEmployee = {
-      id: employee.id,
-      name,
-      email,
-      address,
-      password,
-      hourly_rate,
-      phone_number,
-    };
+    const updatedEmployee = {};
+    if (name) updatedEmployee.name = name;
+    if (email) updatedEmployee.email = email;
+    if (address) updatedEmployee.address = address;
+    if (password) updatedEmployee.password = password;
+    if (hourly_rate) updatedEmployee.hourly_rate = hourly_rate;
+    if (phone_number) updatedEmployee.phone_number = phone_number;
 
-    fetch(`/employees/${employee.id}`, {
+    fetch(`/api/employees/${employee.id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

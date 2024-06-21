@@ -6,13 +6,9 @@ from datetime import datetime
 from flask_mail import Message
 import smtplib
 
-
-
-
 @api_bp.route('/')
 def index():
     return render_template("index.html")
-
 
 class Employees(Resource):
     def get(self):
@@ -20,7 +16,7 @@ class Employees(Resource):
         if not user_id:
             return make_response({"message": "Unauthorized"}, 401)
 
-        user = Employee.query.get(user_id)
+        user = db.session.get(Employee, user_id)
         if not user or not user.isBoss:
             return make_response({"message": "You don't have access to this page"}, 403)
 
@@ -32,7 +28,7 @@ class Employees(Resource):
         if not user_id:
             return make_response({"message": "Unauthorized"}, 401)
 
-        user = Employee.query.get(user_id)
+        user = db.session.get(Employee, user_id)
         if not user or not user.isBoss:
             return make_response({"message": "You don't have access to this page"}, 403)
 
@@ -45,13 +41,12 @@ class Employees(Resource):
             phone_number=data['phone_number'],
             isBoss=data['isBoss']
         )
-        new_employee.password_hash = data['password']  
+        new_employee.password_hash = data['password']
         db.session.add(new_employee)
         db.session.commit()
         return make_response(jsonify(new_employee.to_dict()), 201)
 
 api.add_resource(Employees, '/employees')
-
 
 @api_bp.route('/sign_in', methods=['POST'])
 def sign_in():
@@ -67,15 +62,14 @@ def sign_in():
 @api_bp.route('/sign_out', methods= ["DELETE"])
 def sign_out():
     del session["employee_id"]
-    return{}, 204
+    return {}, 204
 
 @api_bp.route("/me")
 def me():
     user = db.session.get(Employee, session.get("employee_id"))
     if not user:
-        return{}, 401
+        return {}, 401
     return make_response(jsonify(user.to_dict()), 200)
-
 
 @api_bp.route('/send-email', methods=['POST'])
 def send_email():
@@ -97,20 +91,19 @@ def send_email():
     except Exception as e:
         print(f"Failed to send email: {str(e)}")
         return {"message": f"Failed to send email: {str(e)}"}, 500
-    
-    
+
 class EmployeesById(Resource):
     def get(self, id):
         user_id = session.get("employee_id")
         if not user_id:
             return make_response({"message": "Unauthorized"}, 401)
-        
-        user = Employee.query.get(user_id)
+
+        user = db.session.get(Employee, user_id)
         if not user:
             return make_response({"message": "Unauthorized"}, 401)
-        
+
         if user.isBoss or user_id == id:
-            employee = Employee.query.get(id)
+            employee = db.session.get(Employee, id)
             if employee is None:
                 return make_response(jsonify(error='Employee not found'), 404)
             return make_response(jsonify(employee.to_dict()), 200)
@@ -121,21 +114,21 @@ class EmployeesById(Resource):
         user_id = session.get("employee_id")
         if not user_id:
             return make_response({"message": "Unauthorized"}, 401)
-        
-        user = Employee.query.get(user_id)
+
+        user = db.session.get(Employee, user_id)
         if not user:
             return make_response({"message": "Unauthorized"}, 401)
-        
+
         if user.isBoss or user_id == id:
-            employee = Employee.query.get(id)
+            employee = db.session.get(Employee, id)
             if employee is None:
                 return make_response(jsonify(error='Employee not found'), 404)
-            
+
             data = request.get_json()
-            
+
             if 'hours_worked' in data:
                 hours_worked = data['hours_worked']
-                project_id = data.get('project_id')  
+                project_id = data.get('project_id')
                 work_log = WorkLog(
                     employee_id=id,
                     project_id=project_id,
@@ -146,40 +139,46 @@ class EmployeesById(Resource):
             else:
                 for attr in data:
                     if attr == 'password':
-                        employee.password_hash = data[attr] 
+                        employee.password_hash = data[attr]
                     elif hasattr(employee, attr):
                         setattr(employee, attr, data[attr])
-            
+
             db.session.commit()
             return make_response(jsonify(employee.to_dict()), 200)
         else:
             return make_response({"message": "You don't have access to this page"}, 403)
-    
+
     def delete(self, id):
         user_id = session.get("employee_id")
         if not user_id:
             return make_response({"message": "Unauthorized"}, 401)
 
-        user = Employee.query.get(user_id)
+        user = db.session.get(Employee, user_id)
         if not user or not user.isBoss:
             return make_response({"message": "You don't have access to this page"}, 403)
-        employee = Employee.query.get(id)
+
+        employee = db.session.get(Employee, id)
         if employee is None:
             return make_response(jsonify(error='Employee not found'), 404)
+
+        work_logs = WorkLog.query.filter_by(employee_id=id).all()
+        for log in work_logs:
+            log.employee_id = None
+
         db.session.delete(employee)
         db.session.commit()
         return make_response('', 204)
 
 api.add_resource(EmployeesById, '/employees/<int:id>')
 
-class WorkLogs(Resource):
 
+class WorkLogs(Resource):
     def get(self):
         user_id = session.get("employee_id")
         if not user_id:
             return make_response({"message": "Unauthorized"}, 401)
 
-        user = Employee.query.get(user_id)
+        user = db.session.get(Employee, user_id)
         if not user:
             return make_response({"message": "Unauthorized"}, 401)
 
@@ -189,16 +188,16 @@ class WorkLogs(Resource):
             worklogs = [worklog.to_dict() for worklog in WorkLog.query.filter_by(employee_id=user_id).all()]
 
         return make_response(jsonify(worklogs), 200)
-    
+
     def post(self):
         user_id = session.get("employee_id")
         if not user_id:
             return make_response({"message": "Unauthorized"}, 401)
 
-        user = Employee.query.get(user_id)
+        user = db.session.get(Employee, user_id)
         if not user or not user.isBoss:
             return make_response({"message": "You don't have access to this page"}, 403)
-        
+
         data = request.get_json()
         date_obj = datetime.strptime(data['date'], '%Y-%m-%d').date()
         new_worklog = WorkLog(
@@ -219,25 +218,25 @@ class WorkLogByID(Resource):
         if not user_id:
             return make_response({"message": "Unauthorized"}, 401)
 
-        user = Employee.query.get(user_id)
+        user = db.session.get(Employee, user_id)
         if not user or not user.isBoss:
             return make_response({"message": "You don't have access to this page"}, 403)
-        
-        worklog = WorkLog.query.get(id)
+
+        worklog = db.session.get(WorkLog, id)
         if worklog is None:
             return make_response(jsonify(error='Worklog not found'), 404)
         return make_response(jsonify(worklog.to_dict()), 200)
-    
+
     def patch(self, id):
         user_id = session.get("employee_id")
         if not user_id:
             return make_response({"message": "Unauthorized"}, 401)
 
-        user = Employee.query.get(user_id)
+        user = db.session.get(Employee, user_id)
         if not user or not user.isBoss:
             return make_response({"message": "You don't have access to this page"}, 403)
 
-        worklog = WorkLog.query.get(id)
+        worklog = db.session.get(WorkLog, id)
         if worklog is None:
             return make_response(jsonify(error='Worklog not found'), 404)
         data = request.get_json()
@@ -251,17 +250,17 @@ class WorkLogByID(Resource):
                 setattr(worklog, attr, value)
         db.session.commit()
         return make_response(jsonify(worklog.to_dict()), 200)
-    
+
     def delete(self, id):
         user_id = session.get("employee_id")
         if not user_id:
             return make_response({"message": "Unauthorized"}, 401)
 
-        user = Employee.query.get(user_id)
+        user = db.session.get(Employee, user_id)
         if not user or not user.isBoss:
             return make_response({"message": "You don't have access to this page"}, 403)
 
-        worklog = WorkLog.query.get(id)
+        worklog = db.session.get(WorkLog, id)
         if worklog is None:
             return make_response(jsonify(error='Worklog not found'), 404)
         db.session.delete(worklog)
@@ -270,27 +269,25 @@ class WorkLogByID(Resource):
 
 api.add_resource(WorkLogByID, '/worklogs/<int:id>')
 
-
-
 class Projects(Resource):
     def get(self):
         user_id = session.get("employee_id")
         if not user_id:
             return make_response({"message": "Unauthorized"}, 401)
 
-        user = Employee.query.get(user_id)
+        user = db.session.get(Employee, user_id)
         if not user or not user.isBoss:
             return make_response({"message": "You don't have access to this page"}, 403)
 
         projects = [project.to_dict() for project in Project.query.all()]
         return make_response(jsonify(projects), 200)
-    
+
     def post(self):
         user_id = session.get("employee_id")
         if not user_id:
             return make_response({"message": "Unauthorized"}, 401)
 
-        user = Employee.query.get(user_id)
+        user = db.session.get(Employee, user_id)
         if not user or not user.isBoss:
             return make_response({"message": "You don't have access to this page"}, 403)
 
@@ -313,25 +310,25 @@ class ProjectsById(Resource):
         if not user_id:
             return make_response({"message": "Unauthorized"}, 401)
 
-        user = Employee.query.get(user_id)
+        user = db.session.get(Employee, user_id)
         if not user or not user.isBoss:
             return make_response({"message": "You don't have access to this page"}, 403)
 
-        project = Project.query.get(id)
+        project = db.session.get(Project, id)
         if project is None:
             return make_response(jsonify(error='Project not found'), 404)
         return make_response(jsonify(project.to_dict()), 200)
-    
+
     def patch(self, id):
         user_id = session.get("employee_id")
         if not user_id:
             return make_response({"message": "Unauthorized"}, 401)
 
-        user = Employee.query.get(user_id)
+        user = db.session.get(Employee, user_id)
         if not user or not user.isBoss:
             return make_response({"message": "You don't have access to this page"}, 403)
 
-        project = Project.query.get(id)
+        project = db.session.get(Project, id)
         if project is None:
             return make_response(jsonify(error='Project not found'), 404)
         data = request.get_json()
@@ -339,17 +336,17 @@ class ProjectsById(Resource):
             setattr(project, attr, data[attr])
         db.session.commit()
         return make_response(jsonify(project.to_dict()), 200)
-    
+
     def delete(self, id):
         user_id = session.get("employee_id")
         if not user_id:
             return make_response({"message": "Unauthorized"}, 401)
 
-        user = Employee.query.get(user_id)
+        user = db.session.get(Employee, user_id)
         if not user or not user.isBoss:
             return make_response({"message": "You don't have access to this page"}, 403)
 
-        project = Project.query.get(id)
+        project = db.session.get(Project, id)
         if project is None:
             return make_response(jsonify(error='Project not found'), 404)
         db.session.delete(project)
@@ -364,19 +361,19 @@ class Expenses(Resource):
         if not user_id:
             return make_response({"message": "Unauthorized"}, 401)
 
-        user = Employee.query.get(user_id)
+        user = db.session.get(Employee, user_id)
         if not user or not user.isBoss:
             return make_response({"message": "You don't have access to this page"}, 403)
 
         expenses = [expense.to_dict() for expense in Expense.query.all()]
         return make_response(jsonify(expenses), 200)
-    
+
     def post(self):
         user_id = session.get("employee_id")
         if not user_id:
             return make_response({"message": "Unauthorized"}, 401)
 
-        user = Employee.query.get(user_id)
+        user = db.session.get(Employee, user_id)
         if not user or not user.isBoss:
             return make_response({"message": "You don't have access to this page"}, 403)
 
@@ -392,73 +389,72 @@ class Expenses(Resource):
 
 api.add_resource(Expenses, '/expenses')
 
-
 class ExpensesById(Resource):
     def get(self, id):
         user_id = session.get("employee_id")
         if not user_id:
             return make_response({"message": "Unauthorized"}, 401)
 
-        user = Employee.query.get(user_id)
+        user = db.session.get(Employee, user_id)
         if not user or not user.isBoss:
             return make_response({"message": "You don't have access to this page"}, 403)
 
-        expense = Expense.query.get(id)
+        expense = db.session.get(Expense, id)
         if expense is None:
             return make_response(jsonify(error='Expense not found'), 404)
         return make_response(jsonify(expense.to_dict()), 200)
-    
+
     def patch(self, id):
         user_id = session.get("employee_id")
         if not user_id:
             return make_response({"message": "Unauthorized"}, 401)
 
-        user = Employee.query.get(user_id)
+        user = db.session.get(Employee, user_id)
         if not user or not user.isBoss:
             return make_response({"message": "You don't have access to this page"}, 403)
 
-        expense = Expense.query.get(id)
+        expense = db.session.get(Expense, id)
         if expense is None:
             return make_response(jsonify(error='Expense not found'), 404)
 
         data = request.get_json()
-       
+
         if 'project_id' in data:
             if data['project_id'] is not None:
-                project = Project.query.get(data['project_id'])
+                project = db.session.get(Project, data['project_id'])
                 if project is None:
                     return make_response(jsonify(error='Project not found'), 404)
                 expense.project = project
             else:
-                expense.project = None  
+                expense.project = None
 
         for attr in data:
             if attr != 'project_id':
                 setattr(expense, attr, data[attr])
         db.session.commit()
         return make_response(jsonify(expense.to_dict()), 200)
-    
+
     def delete(self, id):
         user_id = session.get("employee_id")
         if not user_id:
             return make_response({"message": "Unauthorized"}, 401)
 
-        user = Employee.query.get(user_id)
+        user = db.session.get(Employee, user_id)
         if not user or not user.isBoss:
             return make_response({"message": "You don't have access to this page"}, 403)
 
-        expense = Expense.query.get(id)
+        expense = db.session.get(Expense, id)
         if expense is None:
             return make_response(jsonify(error='Expense not found'), 404)
         db.session.delete(expense)
         db.session.commit()
         return make_response('', 204)
-    
+
+api.add_resource(ExpensesById, '/expenses/<int:id>')
+
 @app.errorhandler(404)
 def not_found(e):
     return render_template("index.html")
-
-api.add_resource(ExpensesById, '/expenses/<int:id>')
 
 app.register_blueprint(api_bp, url_prefix='/api')
 

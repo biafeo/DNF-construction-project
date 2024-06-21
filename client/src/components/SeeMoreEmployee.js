@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import EmployeeFormEdit from "./EmployeeFormEdit";
 import "./SeeMoreEmployee.css";
 
 function SeeMoreEmployee() {
   const { id } = useParams();
+  const history = useHistory();
   const [employee, setEmployee] = useState(null);
   const [projects, setProjects] = useState([]);
   const [startTime, setStartTime] = useState("");
@@ -13,25 +14,57 @@ function SeeMoreEmployee() {
   const [showEditForm, setShowEditForm] = useState(false);
 
   useEffect(() => {
-    fetch(`/employees/${id}`)
-      .then((r) => r.json())
-      .then((data) => {
-        data.work_logs = data.work_logs.filter((log) => !log.paid);
-        setEmployee(data);
+    fetch(`/api/employees/${id}`, {
+      credentials: "include",
+    })
+      .then((r) => {
+        if (r.status === 401) {
+          history.push("/login");
+          throw new Error("Unauthorized");
+        }
+        if (!r.ok) {
+          throw new Error(`HTTP error! status: ${r.status}`);
+        }
+        return r.text();
+      })
+      .then((text) => {
+        try {
+          const data = JSON.parse(text);
+          data.work_logs = data.work_logs.filter((log) => !log.paid);
+          setEmployee(data);
+        } catch (error) {
+          console.error("Error parsing JSON:", error);
+        }
       })
       .catch((error) => {
         console.error("Error fetching employee:", error);
       });
 
-    fetch("/api/projects")
-      .then((r) => r.json())
-      .then((data) => {
-        setProjects(data);
+    fetch("/api/projects", {
+      credentials: "include",
+    })
+      .then((r) => {
+        if (r.status === 401) {
+          history.push("/login");
+          throw new Error("Unauthorized");
+        }
+        if (!r.ok) {
+          throw new Error(`HTTP error! status: ${r.status}`);
+        }
+        return r.text();
+      })
+      .then((text) => {
+        try {
+          const data = JSON.parse(text);
+          setProjects(data);
+        } catch (error) {
+          console.error("Error parsing JSON:", error);
+        }
       })
       .catch((error) => {
         console.error("Error fetching projects:", error);
       });
-  }, [id]);
+  }, [id, history]);
 
   const calculateTotalPaymentAndHours = (logs, hourly_rate) => {
     return logs.reduce(
@@ -62,30 +95,40 @@ function SeeMoreEmployee() {
       (project) => project.name === selectedProjectName
     );
 
-    fetch(`/employees/${id}`, {
+    fetch(`/api/employees/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include",
       body: JSON.stringify({
         hours_worked: hoursToAdd,
         project_id: selectedProject ? selectedProject.id : null,
       }),
     })
       .then((r) => {
-        if (r.ok) {
-          return r.json();
+        if (r.status === 401) {
+          history.push("/login");
+          throw new Error("Unauthorized");
         }
-        throw new Error("Failed to update hours worked");
+        if (!r.ok) {
+          throw new Error("Failed to update hours worked");
+        }
+        return r.text();
       })
-      .then((updatedEmployee) => {
-        updatedEmployee.work_logs = updatedEmployee.work_logs.filter(
-          (log) => !log.paid
-        );
-        setEmployee(updatedEmployee);
-        setStartTime("");
-        setEndTime("");
-        setSelectedProjectName("");
+      .then((text) => {
+        try {
+          const updatedEmployee = JSON.parse(text);
+          updatedEmployee.work_logs = updatedEmployee.work_logs.filter(
+            (log) => !log.paid
+          );
+          setEmployee(updatedEmployee);
+          setStartTime("");
+          setEndTime("");
+          setSelectedProjectName("");
+        } catch (error) {
+          console.error("Error parsing JSON:", error);
+        }
       })
       .catch((error) => {
         console.error("Error updating hours worked:", error);
@@ -93,26 +136,36 @@ function SeeMoreEmployee() {
   };
 
   const handleTogglePaidStatus = (workLogId, currentStatus) => {
-    fetch(`/worklogs/${workLogId}`, {
+    fetch(`/api/worklogs/${workLogId}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include",
       body: JSON.stringify({ paid: !currentStatus }),
     })
       .then((r) => {
-        if (r.ok) {
-          return r.json();
+        if (r.status === 401) {
+          history.push("/login");
+          throw new Error("Unauthorized");
         }
-        throw new Error("Failed to update paid status");
+        if (!r.ok) {
+          throw new Error("Failed to update paid status");
+        }
+        return r.text();
       })
-      .then((updatedLog) => {
-        setEmployee((prev) => {
-          const updatedLogs = prev.work_logs
-            .map((log) => (log.id === workLogId ? updatedLog : log))
-            .filter((log) => !log.paid);
-          return { ...prev, work_logs: updatedLogs };
-        });
+      .then((text) => {
+        try {
+          const updatedLog = JSON.parse(text);
+          setEmployee((prev) => {
+            const updatedLogs = prev.work_logs
+              .map((log) => (log.id === workLogId ? updatedLog : log))
+              .filter((log) => !log.paid);
+            return { ...prev, work_logs: updatedLogs };
+          });
+        } catch (error) {
+          console.error("Error parsing JSON:", error);
+        }
       })
       .catch((error) => {
         console.error("Error updating paid status:", error);

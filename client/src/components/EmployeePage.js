@@ -16,7 +16,7 @@ function EmployeePage({ user, setUser }) {
   });
 
   useEffect(() => {
-    fetch(`/employees/${id}`)
+    fetch(`/api/employees/${id}`)
       .then((r) => {
         if (!r.ok) {
           throw new Error("Network response was not ok");
@@ -76,7 +76,7 @@ function EmployeePage({ user, setUser }) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    fetch(`/employees/${employee.id}`, {
+    fetch(`/api/employees/${employee.id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

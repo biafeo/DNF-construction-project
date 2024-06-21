@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect, useCallback } from "react";
 
 export const EmployeeContext = createContext();
 
@@ -7,21 +7,21 @@ export const EmployeeProvider = ({ children }) => {
   const [currentEmployee, setCurrentEmployee] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
 
-  const getEmployees = () => {
+  const getEmployees = useCallback(() => {
     fetch("/api/employees")
       .then((r) => r.json())
       .then((data) => {
         setEmployees(data);
       });
-  };
+  }, []);
 
-  const getCurrentEmployee = (id) => {
-    fetch(`/employees/${id}`)
+  const getCurrentEmployee = useCallback((id) => {
+    fetch(`/api/employees/${id}`)
       .then((r) => r.json())
       .then((data) => {
         setCurrentEmployee(data);
       });
-  };
+  }, []);
 
   const handleAddEmployee = (newEmployee) => {
     setEmployees([...employees, newEmployee]);
@@ -42,7 +42,7 @@ export const EmployeeProvider = ({ children }) => {
 
   const handleDeleteEmployee = (employeeId) => {
     setEmployees(employees.filter((employee) => employee.id !== employeeId));
-    fetch(`/employees/${employeeId}`, { method: "DELETE" });
+    fetch(`/api/employees/${employeeId}`, { method: "DELETE" });
     if (currentEmployee && currentEmployee.id === employeeId) {
       setCurrentEmployee(null);
     }
@@ -56,7 +56,7 @@ export const EmployeeProvider = ({ children }) => {
 
   useEffect(() => {
     getEmployees();
-  }, []);
+  }, [getEmployees]);
 
   return (
     <EmployeeContext.Provider

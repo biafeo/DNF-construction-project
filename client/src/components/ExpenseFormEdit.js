@@ -41,7 +41,7 @@ function ExpenseFormEdit({ expense, onEditExpense }) {
       description,
     };
 
-    fetch(`/expenses/${expense.id}`, {
+    fetch(`/api/expenses/${expense.id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

@@ -12,10 +12,10 @@ if __name__ == '__main__':
 
         # Deleting existing data
         print("Deleting existing data...")
-        Project.query.delete()
-        Employee.query.delete()
         WorkLog.query.delete()
         Expense.query.delete()
+        Project.query.delete()
+        Employee.query.delete()
         db.session.commit()
 
         # Creating projects

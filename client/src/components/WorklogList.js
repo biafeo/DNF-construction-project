@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import WorklogFormEdit from "./WorklogFormEdit";
-import BossNavBar from "./BossNavBar";
 
 function WorklogList() {
   const [worklogs, setWorklogs] = useState([]);
@@ -25,12 +24,12 @@ function WorklogList() {
 
   const handleDeleteWorklog = (worklogId) => {
     setWorklogs(worklogs.filter((worklog) => worklog.id !== worklogId));
-    fetch(`/worklogs/${worklogId}`, { method: "DELETE" }).then(() => {});
+    fetch(`/api/worklogs/${worklogId}`, { method: "DELETE" }).then(() => {});
   };
 
   const handleTogglePaidStatus = (worklog) => {
     const updatedWorklog = { ...worklog, paid: !worklog.paid };
-    fetch(`/worklogs/${worklog.id}`, {
+    fetch(`/api/worklogs/${worklog.id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

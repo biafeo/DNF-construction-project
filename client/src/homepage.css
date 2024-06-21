@@ -46,7 +46,7 @@ body {
 .centered-block1 {
   text-align: center;
   display: block;
-  margin-left: -65%;
+  margin-left: 5%;
   border-bottom: 2px solid rgba(220, 164, 60, 1);
   font-size: 27px;
   display: inline-block;

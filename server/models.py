@@ -29,7 +29,7 @@ class Employee(db.Model, SerializerMixin):
     
     @password_hash.setter
     def password_hash(self, password):
-        self._password_hash= flask_bcrypt.generate_password_hash(password).decode("utf-8")
+        self._password_hash = flask_bcrypt.generate_password_hash(password).decode("utf-8")
     
     def authenticate(self, password):
         return flask_bcrypt.check_password_hash(self._password_hash, password)
@@ -53,33 +53,29 @@ class Employee(db.Model, SerializerMixin):
     
     serialize_rules = ('-_password_hash', '-work_logs.employee', 'work_logs', 'hours_worked')
 
-
-class WorkLog(db.Model, SerializerMixin):
-    __tablename__ = "work_logs"
-    
+class WorkLog(db.Model):
+    __tablename__ = 'work_logs'
     id = db.Column(db.Integer, primary_key=True)
-    employee_id = db.Column(db.Integer, db.ForeignKey('employees.id'), nullable=False)
-    project_id = db.Column(db.Integer, db.ForeignKey('projects.id'), nullable=True)  
-    hours_worked = db.Column(db.Integer)
-    date = db.Column(db.Date)
-    paid = db.Column(db.Boolean, default=False) 
-    
+    employee_id = db.Column(db.Integer, db.ForeignKey('employees.id'), nullable=True)  
+    project_id = db.Column(db.Integer, db.ForeignKey('projects.id'), nullable=False)
+    hours_worked = db.Column(db.Float, nullable=False)
+    date = db.Column(db.Date, nullable=False)
+    paid = db.Column(db.Boolean, default=False)
+
     employee = relationship('Employee', back_populates='work_logs')
     project = relationship('Project', back_populates='work_logs')
-    serialize_rules = ('-employee.work_logs', '-project.work_logs')
-
+    
     def to_dict(self):
         return {
             'id': self.id,
             'employee_id': self.employee_id,
-            'employee_name': self.employee.name,  
+            'employee_name': self.employee.name if self.employee else None,  
             'project_id': self.project_id,
-            'project_name': self.project.name if self.project else None,  
+            'project_name': self.project.name if self.project else None, 
             'hours_worked': self.hours_worked,
-            'date': self.date.isoformat(),
-            'paid': self.paid
+            'date': self.date,
+            'paid': self.paid if hasattr(self, 'paid') else None
         }
-
 
 class Project(db.Model, SerializerMixin):
     __tablename__ = "projects"
@@ -88,7 +84,7 @@ class Project(db.Model, SerializerMixin):
     name = db.Column(db.String)
     location = db.Column(db.String)
     description = db.Column(db.String)
-    contract_payment=db.Column(db.Integer)
+    contract_payment = db.Column(db.Integer)
     
     work_logs = relationship('WorkLog', back_populates='project')
     expenses = relationship('Expense', back_populates='project')
@@ -110,13 +106,10 @@ class Project(db.Model, SerializerMixin):
             'description': self.description,
             'material_expenses': self.material_expenses,
             'employee_expenses': self.employee_expenses,
-            'contract_payment' :self.contract_payment
+            'contract_payment': self.contract_payment
         }
-
-    
     
     serialize_rules = ('-work_logs.project', 'work_logs', 'expenses')
-
 
 class Expense(db.Model, SerializerMixin):
     __tablename__ = "expenses"

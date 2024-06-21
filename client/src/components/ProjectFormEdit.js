@@ -27,7 +27,7 @@ function ProjectFormEdit({ project, onEditProject }) {
       contract_payment,
     };
 
-    fetch(`/projects/${project.id}`, {
+    fetch(`/api/projects/${project.id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

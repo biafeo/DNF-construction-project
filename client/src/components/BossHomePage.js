@@ -49,24 +49,30 @@ function BossHomePage() {
           <div className="welcome">
             <div className="welcome-text">
               <h2>Professional Construction Services</h2>
-              <p>
+              <div className="service-section">
                 <div className="centered-block1">Residential Construction</div>
                 <div className="centered-block">
                   Custom homes, renovations, and additions.
                 </div>
+              </div>
+              <div className="service-section">
                 <div className="centered-block1">Commercial Construction</div>
                 <div className="centered-block">
                   Office buildings, retail spaces, and industrial projects.
                 </div>
+              </div>
+              <div className="service-section">
                 <div className="centered-block1">Project Management</div>
                 <div className="centered-block">
                   End-to-end project management services.
                 </div>
+              </div>
+              <div className="service-section">
                 <div className="centered-block1">Consulting Services</div>
                 <div className="centered-block">
                   Construction consulting and planning.
                 </div>
-              </p>
+              </div>
             </div>
           </div>
         </section>
@@ -134,13 +140,23 @@ function BossHomePage() {
           {isFormVisible && (
             <form className="contact-form">
               <label>
-                <input type="text" placeholder="Name" required />
+                <input
+                  type="text"
+                  placeholder="Name"
+                  defaultValue=""
+                  required
+                />
               </label>
               <label>
-                <input type="email" placeholder="Email" required />
+                <input
+                  type="email"
+                  placeholder="Email"
+                  defaultValue=""
+                  required
+                />
               </label>
               <label>
-                <textarea placeholder="Message" required />
+                <textarea placeholder="Message" defaultValue="" required />
               </label>
               <div className="button-container">
                 <button type="submit" className="contact-submit-button">

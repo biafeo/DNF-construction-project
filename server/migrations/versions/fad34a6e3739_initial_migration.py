@@ -1,8 +1,8 @@
-"""initial migrate
+"""initial migration
 
-Revision ID: b3a215fab23e
+Revision ID: fad34a6e3739
 Revises: 
-Create Date: 2024-06-17 15:40:36.716618
+Create Date: 2024-06-20 18:45:15.044727
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'b3a215fab23e'
+revision = 'fad34a6e3739'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -48,11 +48,10 @@ def upgrade():
     )
     op.create_table('work_logs',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('employee_id', sa.Integer(), nullable=False),
-    sa.Column('project_id', sa.Integer(), nullable=True),
-    sa.Column('hours_worked', sa.Integer(), nullable=True),
-    sa.Column('date', sa.Date(), nullable=True),
-    sa.Column('paid', sa.Boolean(), nullable=True),
+    sa.Column('employee_id', sa.Integer(), nullable=True),
+    sa.Column('project_id', sa.Integer(), nullable=False),
+    sa.Column('hours_worked', sa.Float(), nullable=False),
+    sa.Column('date', sa.Date(), nullable=False),
     sa.ForeignKeyConstraint(['employee_id'], ['employees.id'], name=op.f('fk_work_logs_employee_id_employees')),
     sa.ForeignKeyConstraint(['project_id'], ['projects.id'], name=op.f('fk_work_logs_project_id_projects')),
     sa.PrimaryKeyConstraint('id')

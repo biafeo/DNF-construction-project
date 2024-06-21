@@ -25,7 +25,7 @@ function ProjectList() {
 
   const handleDeleteProject = (projectId) => {
     setProjects(projects.filter((project) => project.id !== projectId));
-    fetch(`/projects/${projectId}`, { method: "DELETE" }).then(() => {});
+    fetch(`/api/projects/${projectId}`, { method: "DELETE" }).then(() => {});
   };
   const [isFormVisible, setFormVisible] = useState(false);
 

@@ -9,7 +9,7 @@ function SeeMoreProject() {
   const [isFormVisible, setFormVisible] = useState(false);
 
   useEffect(() => {
-    fetch(`/projects/${id}`)
+    fetch(`/api/projects/${id}`)
       .then((response) => response.json())
       .then((data) => {
         setProject(data);

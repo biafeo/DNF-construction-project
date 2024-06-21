@@ -23,7 +23,6 @@ function Login({ setUser }) {
         }
       })
       .then((data) => {
-        console.log("Login successful:", data);
         setUser(data);
         if (data.isBoss) {
           history.push("/home");

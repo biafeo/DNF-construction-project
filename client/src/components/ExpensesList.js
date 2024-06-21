@@ -37,7 +37,7 @@ function ExpensesList() {
 
   const handleDeleteExpense = (expenseId) => {
     setExpenses(expenses.filter((expense) => expense.id !== expenseId));
-    fetch(`/expenses/${expenseId}`, { method: "DELETE" }).then(() => {});
+    fetch(`/api/expenses/${expenseId}`, { method: "DELETE" }).then(() => {});
   };
 
   return (
