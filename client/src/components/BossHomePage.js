@@ -94,9 +94,7 @@ function BossHomePage() {
               <strong>Quality Assurance</strong>
               <br />
               <img src="/image1.png" alt="Quality Assurance" />
-              <p>
-                Commitment to high standards and meticulous attention to detail.
-              </p>
+              <p>Commitment to high standards and attention to detail.</p>
             </div>
             <div className="why-card">
               <strong>Timely Completion</strong>
