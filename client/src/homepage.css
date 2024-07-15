@@ -259,7 +259,6 @@ body {
   margin-right: 10px;
 }
 
-
 @media (max-width: 768px) {
   .contact-form-container {
     flex-direction: column;
@@ -300,4 +299,24 @@ body {
     padding: 6px;
     max-width: 100%;
   }
+}
+
+#footer {
+  background-color: rgba(32, 33, 43, 1);
+  color: rgba(255, 255, 255, 0.8);
+  font-family: "League Spartan", sans-serif;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 15px 0;
+}
+
+#footer h1 {
+  font-size: 15px;
+  margin: 2px 0;
+}
+
+#footer p {
+  font-size: 10px;
+  margin: 2px 0;
 }
