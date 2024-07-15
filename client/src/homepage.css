@@ -300,6 +300,38 @@ body {
     max-width: 100%;
   }
 }
+/* @media (max-width: 768px) {
+  .homepage {
+    background-color: black;
+    background-image: none;
+  }
+} */
+@media (max-width: 768px) {
+  .welcome {
+    background-color: rgba(32, 33, 43, 1);
+    padding: 20px;
+    padding-top: 60px;
+    min-height: 400px;
+  }
+  .welcome-text {
+    text-align: center;
+  }
+
+  .welcome-text h2,
+  .welcome-text h3 {
+    color: white;
+    text-align: center;
+  }
+  .centered-block {
+    text-align: center;
+    display: block;
+    margin: 0 auto;
+  }
+  /* .welcome-text p {
+    color: white;
+    text-align: center;
+  } */
+}
 
 #footer {
   background-color: rgba(32, 33, 43, 1);
