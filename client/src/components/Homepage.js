@@ -169,6 +169,10 @@ function Homepage() {
           )}
         </div>
       </div>
+      <section id="footer">
+        <h1>DNF construction</h1>
+        <p> Copyright &copy; 2024 Beatriz Feo. All rights reserved.</p>
+      </section>
     </>
   );
 }

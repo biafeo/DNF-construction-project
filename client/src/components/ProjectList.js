@@ -31,31 +31,39 @@ function ProjectList() {
   };
   return (
     <>
-      <div className="project-container">
-        <div className="projects-list">
-          {projects.map((project) => (
-            <div key={project.id} className="employees-card">
-              <h3 className="styled-h32">{project.name}</h3>
-              <div className="button-container">
-                <Link to={`/projects/${project.id}`}>
-                  <button className="button">View Details</button>
-                </Link>
+      <div className="page-container">
+        <div className="content-wrap">
+          <div className="project-container">
+            <div className="projects-list">
+              {projects.map((project) => (
+                <div key={project.id} className="employees-card">
+                  <h3 className="styled-h32">{project.name}</h3>
+                  <div className="button-container">
+                    <Link to={`/projects/${project.id}`}>
+                      <button className="button">View Details</button>
+                    </Link>
 
-                <button
-                  className="button"
-                  onClick={() => handleDeleteProject(project.id)}
-                >
-                  Delete
-                </button>
-              </div>
+                    <button
+                      className="button"
+                      onClick={() => handleDeleteProject(project.id)}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
 
-        <button onClick={toggleForm} className="toggle-button">
-          {isFormVisible ? "Cancel" : "Add Project"}
-        </button>
-        {isFormVisible && <ProjectForm onAddProject={handleAddProject} />}
+            <button onClick={toggleForm} className="toggle-button">
+              {isFormVisible ? "Cancel" : "Add Project"}
+            </button>
+            {isFormVisible && <ProjectForm onAddProject={handleAddProject} />}
+          </div>
+        </div>
+        <footer id="footer">
+          <h1>DNF Construction</h1>
+          <p> Copyright &copy; 2024 Beatriz Feo. All rights reserved.</p>
+        </footer>
       </div>
     </>
   );

@@ -61,65 +61,73 @@ function WorklogList() {
 
   return (
     <>
-      <div className="worklog-container">
-        <div className="worklogs-list">
-          {worklogs.map((worklog) => (
-            <div key={worklog.id} className="worklogs-info">
-              <div className="worklog-icon">
-                <img src="/worklog2.jpeg" alt="Address icon" />
-                <h3 className="h3-expense">{worklog.employee_name}</h3>
-              </div>
-              <div className="worklog-icon">
-                <img src="/worklog3.jpeg" alt="Address icon" />
-                <h3>{worklog.project_name}</h3>
-              </div>
-              <div className="worklog-icon">
-                <img src="/worklog4.jpeg" alt="Address icon" />
-                <h3>{worklog.hours_worked}hrs</h3>
-              </div>
-              <div className="worklog-icon">
-                <img src="/worklog5.jpeg" alt="Address icon" />
-                <h3>{worklog.date}</h3>
-              </div>
-              <div className="worklog-icon">
-                <img src="/worklog1.jpeg" alt="Address icon" />
-                <h3>Paid: {worklog.paid ? "Yes" : "No"}</h3>
-              </div>
-              <div className="worklogs-button-container">
-                <button
-                  className="worklogs-button"
-                  onClick={() =>
-                    setEditWorklogId(
-                      editWorklogId === worklog.id ? null : worklog.id
-                    )
-                  }
-                >
-                  {editWorklogId === worklog.id ? "Cancel" : "Edit"}
-                </button>
-                <button
-                  className="worklogs-button"
-                  onClick={() => handleDeleteWorklog(worklog.id)}
-                >
-                  Delete
-                </button>
-                <button
-                  className="worklogs-button"
-                  onClick={() => handleTogglePaidStatus(worklog)}
-                >
-                  {worklog.paid ? "Paid" : "Not Paid"}
-                </button>
-              </div>
-              {editWorklogId === worklog.id && (
-                <div className="worklog-edit-form">
-                  <WorklogFormEdit
-                    onEditWorklog={handleEditWorklog}
-                    worklog={worklog}
-                  />
+      <div className="page-container">
+        <div className="content-wrap">
+          <div className="worklog-container">
+            <div className="worklogs-list">
+              {worklogs.map((worklog) => (
+                <div key={worklog.id} className="worklogs-info">
+                  <div className="worklog-icon">
+                    <img src="/worklog2.jpeg" alt="Address icon" />
+                    <h3 className="h3-expense">{worklog.employee_name}</h3>
+                  </div>
+                  <div className="worklog-icon">
+                    <img src="/worklog3.jpeg" alt="Address icon" />
+                    <h3>{worklog.project_name}</h3>
+                  </div>
+                  <div className="worklog-icon">
+                    <img src="/worklog4.jpeg" alt="Address icon" />
+                    <h3>{worklog.hours_worked}hrs</h3>
+                  </div>
+                  <div className="worklog-icon">
+                    <img src="/worklog5.jpeg" alt="Address icon" />
+                    <h3>{worklog.date}</h3>
+                  </div>
+                  <div className="worklog-icon">
+                    <img src="/worklog1.jpeg" alt="Address icon" />
+                    <h3>Paid: {worklog.paid ? "Yes" : "No"}</h3>
+                  </div>
+                  <div className="worklogs-button-container">
+                    <button
+                      className="worklogs-button"
+                      onClick={() =>
+                        setEditWorklogId(
+                          editWorklogId === worklog.id ? null : worklog.id
+                        )
+                      }
+                    >
+                      {editWorklogId === worklog.id ? "Cancel" : "Edit"}
+                    </button>
+                    <button
+                      className="worklogs-button"
+                      onClick={() => handleDeleteWorklog(worklog.id)}
+                    >
+                      Delete
+                    </button>
+                    <button
+                      className="worklogs-button"
+                      onClick={() => handleTogglePaidStatus(worklog)}
+                    >
+                      {worklog.paid ? "Paid" : "Not Paid"}
+                    </button>
+                  </div>
+                  {editWorklogId === worklog.id && (
+                    <div className="worklog-edit-form">
+                      <WorklogFormEdit
+                        onEditWorklog={handleEditWorklog}
+                        worklog={worklog}
+                      />
+                    </div>
+                  )}
                 </div>
-              )}
+              ))}
             </div>
-          ))}
+          </div>
         </div>
+        <footer id="footer">
+          <h1>DNF Construction</h1>
+          <p> Copyright &copy; 2024 Beatriz Feo. All rights reserved.</p>
+        </footer>
       </div>
     </>
   );

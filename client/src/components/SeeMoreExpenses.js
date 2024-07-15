@@ -31,23 +31,31 @@ function SeeMoreExpenses() {
   const { amount, description, project } = expense;
 
   return (
-    <div className="employee-info">
-      <div>
-        <h1>{description}</h1>
+    <div className="page-container">
+      <div className="content-wrap">
+        <div className="employee-info">
+          <div>
+            <h1>{description}</h1>
+          </div>
+          <div>
+            <h3>Amount: {amount}</h3>
+            <h3>Project: {project ? project.name : "No project assigned"}</h3>
+            <button onClick={toggleForm} className="toggle-button">
+              {isFormVisible ? "Cancel" : "Edit Expense"}
+            </button>
+            {isFormVisible && (
+              <ExpenseFormEdit
+                onEditExpense={handleEditExpense}
+                expense={expense}
+              />
+            )}
+          </div>
+        </div>
       </div>
-      <div>
-        <h3>Amount: {amount}</h3>
-        <h3>Project: {project ? project.name : "No project assigned"}</h3>
-        <button onClick={toggleForm} className="toggle-button">
-          {isFormVisible ? "Cancel" : "Edit Expense"}
-        </button>
-        {isFormVisible && (
-          <ExpenseFormEdit
-            onEditExpense={handleEditExpense}
-            expense={expense}
-          />
-        )}
-      </div>
+      <footer id="footer">
+        <h1>DNF Construction</h1>
+        <p> Copyright &copy; 2024 Beatriz Feo. All rights reserved.</p>
+      </footer>
     </div>
   );
 }

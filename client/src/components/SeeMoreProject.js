@@ -48,30 +48,38 @@ function SeeMoreProject() {
 
   return (
     <>
-      <div>
-        <div className="employee-info">
+      <div className="page-container">
+        <div className="content-wrap">
           <div>
-            <h1>{name}</h1>
-          </div>
-          <div>
-            <h3>Location: {location}</h3>
-            <h3>Description: {description}</h3>
-            <h3>Material Expenses: {material_expenses}</h3>
-            <h3>Employee Expenses: {employee_expenses}</h3>
-            <h3>Contract Payment: {contract_payment}</h3>
-            <h3>Total Expenses: {totalExpense}</h3>
-            <h3>Profit: {profit}</h3>
+            <div className="employee-info">
+              <div>
+                <h1>{name}</h1>
+              </div>
+              <div>
+                <h3>Location: {location}</h3>
+                <h3>Description: {description}</h3>
+                <h3>Material Expenses: {material_expenses}</h3>
+                <h3>Employee Expenses: {employee_expenses}</h3>
+                <h3>Contract Payment: {contract_payment}</h3>
+                <h3>Total Expenses: {totalExpense}</h3>
+                <h3>Profit: {profit}</h3>
+              </div>
+            </div>
+            <button onClick={toggleForm} className="toggle-button">
+              {isFormVisible ? "Cancel" : "Edit Project"}
+            </button>
+            {isFormVisible && (
+              <ProjectFormEdit
+                onEditProject={handleEditProject}
+                project={editProject}
+              />
+            )}
           </div>
         </div>
-        <button onClick={toggleForm} className="toggle-button">
-          {isFormVisible ? "Cancel" : "Edit Project"}
-        </button>
-        {isFormVisible && (
-          <ProjectFormEdit
-            onEditProject={handleEditProject}
-            project={editProject}
-          />
-        )}
+        <footer id="footer">
+          <h1>DNF Construction</h1>
+          <p> Copyright &copy; 2024 Beatriz Feo. All rights reserved.</p>
+        </footer>
       </div>
     </>
   );

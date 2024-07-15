@@ -42,36 +42,47 @@ function ExpensesList() {
 
   return (
     <>
-      <div className="expense-container">
-        <div className="expenses-list">
-          {expenses.map((expense) => (
-            <div key={expense.id} className="expense-card">
-              <h3 className="h3-expense">{expense.description}</h3>
-              <div className="button-container">
-                <Link to={`/expenses/${expense.id}`} className="button-link">
-                  <button className="button">View Expense Details</button>
-                </Link>
+      <div className="page-container">
+        <div className="content-wrap">
+          <div className="expense-container">
+            <div className="expenses-list">
+              {expenses.map((expense) => (
+                <div key={expense.id} className="expense-card">
+                  <h3 className="h3-expense">{expense.description}</h3>
+                  <div className="button-container">
+                    <Link
+                      to={`/expenses/${expense.id}`}
+                      className="button-link"
+                    >
+                      <button className="button">View Expense Details</button>
+                    </Link>
 
-                <button
-                  className="button"
-                  onClick={() => handleDeleteExpense(expense.id)}
-                >
-                  Delete
-                </button>
-              </div>
+                    <button
+                      className="button"
+                      onClick={() => handleDeleteExpense(expense.id)}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
+            {editExpense && (
+              <ExpenseFormEdit
+                onEditExpense={handleEditExpense}
+                expense={editExpense}
+              />
+            )}
+            <button onClick={toggleForm} className="toggle-button">
+              {isFormVisible ? "Cancel" : "Add Expense"}
+            </button>
+            {isFormVisible && <ExpenseForm onAddExpense={handleAddExpense} />}
+          </div>
         </div>
-        {editExpense && (
-          <ExpenseFormEdit
-            onEditExpense={handleEditExpense}
-            expense={editExpense}
-          />
-        )}
-        <button onClick={toggleForm} className="toggle-button">
-          {isFormVisible ? "Cancel" : "Add Expense"}
-        </button>
-        {isFormVisible && <ExpenseForm onAddExpense={handleAddExpense} />}
+        <footer id="footer">
+          <h1>DNF Construction</h1>
+          <p> Copyright &copy; 2024 Beatriz Feo. All rights reserved.</p>
+        </footer>
       </div>
     </>
   );
