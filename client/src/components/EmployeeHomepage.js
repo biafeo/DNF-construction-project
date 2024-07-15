@@ -24,7 +24,10 @@ function EmployeeHomepage() {
 
   const sendEmail = (e) => {
     e.preventDefault();
-
+    if (!formData.name || !formData.email || !formData.message) {
+      alert("Please fill out all fields before submitting.");
+      return;
+    }
     emailjs
       .sendForm(
         "service_v5fm5bu",
