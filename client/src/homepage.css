@@ -300,17 +300,17 @@ body {
     max-width: 100%;
   }
 }
-/* @media (max-width: 768px) {
+
+@media (max-width: 768px) {
   .homepage {
     background-color: black;
     background-image: none;
   }
-} */
-@media (max-width: 768px) {
   .welcome {
     background-color: rgba(32, 33, 43, 1);
     padding: 20px;
-    padding-top: 60px;
+    margin-top: -10%;
+    padding-top: 40px;
     min-height: 400px;
   }
   .welcome-text {
